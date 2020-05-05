@@ -7,7 +7,7 @@ module.exports.Server = class{
         io = sio;
         gameSocket = socket;
         console.log('Connection established');
-        // gameSocket.emit('connected');
+        gameSocket.emit('connected');
 
         // Host Events
         gameSocket.on('hostCreateGame', this.hostCreateGame);
