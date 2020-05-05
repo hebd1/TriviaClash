@@ -17,6 +17,7 @@ http.listen(port, () => {
 
 io.on('connection', (socket) => {
     console.log('a user connected');
+    var numPlayers = 0;
 
     socket.on('disconnect', () => {
       console.log('user disconnected');
@@ -29,5 +30,8 @@ io.on('connection', (socket) => {
         socket.join(thisGameId)
     });
 
+    socket.on('joinGame', () => {
+        // start here
+    })
     
 });
