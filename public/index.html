@@ -105,7 +105,7 @@
     <!-- JavaScript Libraries -->
 
     <!-- jQuery! -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     <!-- TextFit resizes text to fill a container.
         It's used so the titles and game words fit properly on any size screen.
@@ -119,22 +119,6 @@
     <!-- If Socket.IO is used with Express, then the /socket.io/ path will
         serve the proper Socket.IO javascript files used by the browser -->
     <script src="/socket.io/socket.io.js"></script>
-    <script>
-        $(document).ready(function() {
-            var socket = io();
-
-            socket.on('newGameCreated', function(data) {
-                console.log('newGameCreated reached')
-                $('#gameArea').html($('#create-game-template').html());
-                $('#gameURL').text(window.location.href);
-                $('#NewGameCode').text(data.gameId)
-            });
-
-             $('#btnCreateGame').click(function () {
-                socket.emit('createGame');
-            });
-        });
-
-    </script>
+    <script type="text/javascript" src="/js/Client.js"></script>
 </body>
 </html>
