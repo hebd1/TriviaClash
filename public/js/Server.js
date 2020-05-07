@@ -44,8 +44,20 @@ module.exports.Server = class{
     }
 
     // Player Events
-    playerJoined() {
+    playerJoined(data) {
+        console.log('player joined reached');
+        var sock = this;
 
+        // verify roome exists
+        if (io.sockets.adapter.rooms[data.gameId] != undefined) {
+            data.mySocketId = sock.id;
+            sock.join(data.gameId);
+            io.sockets.in(data.gameId).emit('playerJoinedRoom', data);
+        } else {
+            this.emit('error', {message: 'unable to join room'});
+        }
+
+        
     }
 
     playerAnswer() {
