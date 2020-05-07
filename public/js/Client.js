@@ -7,6 +7,13 @@ $(document).ready(function() {
     let role; // player or host
     let currentRound;
 
+    var Host = {
+        players : [],
+        isNewGame : false,
+        numPlayers : 0,
+        correctAnsser : '',
+    }
+
 
     // Server messages
     socket.on('connected', function() {
