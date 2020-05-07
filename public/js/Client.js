@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
     // Create web socket connection on page load
-    let socket = io.connect();
+    var socket = io.connect();
     let socketID;
     let gameID;
     let role; // player or host
@@ -38,23 +38,40 @@ $(document).ready(function() {
         $('#NewGameCode').text(data.gameId)
     });
 
-    socket.on('playerJoinedRoom', function (data) {
-        if (Host.isNewGame) {
-            $('#gameArea').html($('#create-game-template').html());
+    socket.on('clientJoinedRoom', function (data) {
+        console.log('clientJoinedRoom reached')
+        // Client is a host
+        if (role == 'Host') {
+            if (Host.isNewGame) {
+                $('#gameArea').html($('#create-game-template').html());
+            }
+    
+            // Update the lobby screen
+            $('#playersWaiting').append('<p/>').text('Player ' + data.name + ' joined the game!');
+    
+            Host.players.push(data);
+    
+            Host.numPlayers += 1;
+    
+            if (Host.numPlayers == 2) {
+                console.log('Room is full!');
+                socket.emit('hostRoomFull', gameID);
+                currentRound = 0;
+            }
+        } 
+        // Client is a player
+        else {
+            console.log('client is a player;)');
+            console.log(data.mySocketId);
+            console.log(socket.io.engine.id);
+            if (socket.io.engine.id == data.mySocketId) {
+                gameID = data.gameId;
+                $('#playerWaitingMessage').append('<p/>').text('Joined game ' + gameID + '. Please wait for the game to begin..');
+            }
         }
-
-        // Update the lobby screen
-        $('#playersWaiting').append('<p/>').text('Player ' + data.name + ' joined the game!');
-
-        Host.players.push(data);
-
-        Host.numPlayers += 1;
-
-        if (Host.numPlayers == 2) {
-            console.log('Room is full!');
-            socket.emit('hostRoomFull', gameID);
-            currentRound = 0;
-        }
+        
+        
+        
     });
 
 
@@ -72,6 +89,7 @@ $(document).ready(function() {
 
     // Join Game Page events
     $(document).on('click', '#btnStart', function() {
+        console.log('start button clicked');
         let data = {
             gameId : $('#inputGameId').val(),
             name : $('#inputPlayerName').val() || 'Anonymous'

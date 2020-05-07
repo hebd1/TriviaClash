@@ -15,7 +15,7 @@ module.exports.Server = class{
         gameSocket.on('hostNextround', this.hostNextRound);
 
         // Player Events
-        gameSocket.on('playerReqestJoin', this.playerRequestJoin);
+        gameSocket.on('playerRequestJoin', this.playerRequestJoin);
         gameSocket.on('playerAnswer', this.playerAnswer);
         gameSocket.on('playerRestart', this.playerRestart);
         gameSocket.on('disconnect', this.playerDisconnect);
@@ -44,14 +44,13 @@ module.exports.Server = class{
 
     // Player Events
     playerRequestJoin(data) {
-        console.log('player joined reached');
-        var sock = this;
+        console.log('player request join reached');
 
         // verify roome exists
         if (io.sockets.adapter.rooms[data.gameId] != undefined) {
-            data.mySocketId = sock.id;
-            sock.join(data.gameId);
-            io.sockets.in(data.gameId).emit('playerJoinedRoom', data);
+            data.mySocketId = gameSocket.id;
+            gameSocket.join(data.gameId);
+            io.sockets.in(data.gameId).emit('clientJoinedRoom', data);
         } else {
             this.emit('error', {message: 'unable to join room'});
         }
