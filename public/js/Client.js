@@ -22,13 +22,7 @@ $(document).ready(function() {
 
     }
 
-
-
-
     // Server messages
-    socket.on('connected', function() {
-       // console.log(socketID);
-    });
 
     socket.on('newGameCreated', function(data) {
         // initialize game
@@ -44,9 +38,22 @@ $(document).ready(function() {
         $('#NewGameCode').text(data.gameId)
     });
 
-    socket.on('playerJoinedRoom', function () {
+    socket.on('playerJoinedRoom', function (data) {
         if (Host.isNewGame) {
             $('#gameArea').html($('#create-game-template').html());
+        }
+
+        // Update the lobby screen
+        $('#playersWaiting').append('<p/>').text('Player ' + data.name + ' joined the game!');
+
+        Host.players.push(data);
+
+        Host.numPlayers += 1;
+
+        if (Host.numPlayers == 2) {
+            console.log('Room is full!');
+            socket.emit('hostRoomFull', gameID);
+            currentRound = 0;
         }
     });
 
@@ -54,13 +61,12 @@ $(document).ready(function() {
     // Document Interaction Events
 
     // Welcome page events
-    $('#btnCreateGame').click(function () {
+    $(document).on('click', '#btnCreateGame', function() {
         socket.emit('hostCreateGame');
     });
 
    
-
-    $('#btnJoinGame').click(function () {
+    $(document).on('click', '#btnJoinGame', function() {
         $('#gameArea').html($('#join-game-template').html());
     });
 
@@ -71,7 +77,7 @@ $(document).ready(function() {
             name : $('#inputPlayerName').val() || 'Anonymous'
         };
 
-        socket.emit('playerJoinGame', data);
+        socket.emit('playerRequestJoin', data);
 
         role = 'Player';
         Player.name = data.name;

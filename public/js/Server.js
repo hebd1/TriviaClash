@@ -7,7 +7,6 @@ module.exports.Server = class{
         io = sio;
         gameSocket = socket;
         console.log('Connection established');
-        gameSocket.emit('connected');
 
         // Host Events
         gameSocket.on('hostCreateGame', this.hostCreateGame);
@@ -16,7 +15,7 @@ module.exports.Server = class{
         gameSocket.on('hostNextround', this.hostNextRound);
 
         // Player Events
-        gameSocket.on('playerJoinGame', this.playerJoined);
+        gameSocket.on('playerReqestJoin', this.playerRequestJoin);
         gameSocket.on('playerAnswer', this.playerAnswer);
         gameSocket.on('playerRestart', this.playerRestart);
         gameSocket.on('disconnect', this.playerDisconnect);
@@ -44,7 +43,7 @@ module.exports.Server = class{
     }
 
     // Player Events
-    playerJoined(data) {
+    playerRequestJoin(data) {
         console.log('player joined reached');
         var sock = this;
 
