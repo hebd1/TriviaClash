@@ -245,6 +245,19 @@ html, body {
     width: 100%;
 }
 
+.countdown {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#startCountdown {
+    font-size: 10rem;
+    
+}
+
 #hostWord h2, #btnPlayerRestart h3 {
     font-size: 161px;
     line-height: 1em;

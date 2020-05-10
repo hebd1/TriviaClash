@@ -1,7 +1,7 @@
 let io;
 let gameSocket;
 
-module.exports.Server = class{
+module.exports.Server = class {
 
     constructor(sio, socket) {
         io = sio;
@@ -12,7 +12,7 @@ module.exports.Server = class{
         gameSocket.on('hostCreateGame', this.hostCreateGame);
         gameSocket.on('hostRoomFull', this.hostStartGame);
         gameSocket.on('hostTimeUp', this.hostTimeUp);
-        gameSocket.on('hostNextround', this.hostNextRound);
+        gameSocket.on('hostNextRound', this.hostNextRound);
 
         // Player Events
         gameSocket.on('playerRequestJoin', this.playerRequestJoin);
@@ -30,8 +30,16 @@ module.exports.Server = class{
         gameSocket.join(thisGameId);
     }
 
-    hostStartGame() {
+    // Two players have entered the game room
+    hostStartGame(gameId) {
+        // setup game logic 
+        // query trivia API
 
+        // Display countdown
+        // wait 2 seconds before starting
+        // TODO: display start button 
+        setTimeout(function() {io.sockets.in(gameId).emit('startCountDown', gameId);}, 2000);
+        //io.sockets.in(gameId).emit('startCountDown', gameId);
     }
 
     hostTimeUp() {
@@ -39,7 +47,7 @@ module.exports.Server = class{
     }
 
     hostNextRound() {
-
+        console.log('host next round reached');
     }
 
     // Player Events
