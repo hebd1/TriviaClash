@@ -1,5 +1,6 @@
 let io;
 let gameSocket;
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 module.exports.Server = class {
 
@@ -7,6 +8,7 @@ module.exports.Server = class {
         io = sio;
         gameSocket = socket;
         console.log('Connection established');
+        this.triviaGame;
 
         // Host Events
         gameSocket.on('hostCreateGame', this.hostCreateGame);
@@ -28,6 +30,7 @@ module.exports.Server = class {
         var thisGameId = (Math.random() * 100000) | 0;
         gameSocket.emit('newGameCreated', { gameId: thisGameId, mySocketId: gameSocket.id });
         gameSocket.join(thisGameId);
+        this.triviaGame = new Game();
     }
 
     // Two players have entered the game room
@@ -38,7 +41,7 @@ module.exports.Server = class {
         // Display countdown
         // wait 2 seconds before starting
         // TODO: display start button 
-        setTimeout(function() {io.sockets.in(gameId).emit('startCountDown', gameId);}, 2000);
+        setTimeout(function () { io.sockets.in(gameId).emit('startCountDown', gameId); }, 2000);
         //io.sockets.in(gameId).emit('startCountDown', gameId);
     }
 
@@ -60,10 +63,10 @@ module.exports.Server = class {
             gameSocket.join(data.gameId);
             io.sockets.in(data.gameId).emit('clientJoinedRoom', data);
         } else {
-            this.emit('error', {message: 'unable to join room'});
+            this.emit('error', { message: 'unable to join room' });
         }
 
-        
+
     }
 
     playerAnswer() {
@@ -77,6 +80,23 @@ module.exports.Server = class {
     playerDisconnect() {
         console.log('user disconnected');
     }
+}
 
+class Game {
+    constructor() {
+        var questions = [];
+        this.getQuestions();
 
+    }
+
+    getQuestions() {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open("GET", 'https://opentdb.com/api.php?amount=10', false); // false for synchronous request
+        xmlHttp.send(null);
+        let response = xmlHttp.responseText;
+        //console.log(response);
+        let obj = JSON.parse(response);
+        let questions = obj.results[1];
+        console.log('\n' + questions);
+    }
 }
