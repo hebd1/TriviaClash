@@ -22,6 +22,19 @@ $(document).ready(function() {
                     }
                 }, 1000);
             };
+
+            this.displayNextRound = function(question) {
+                console.log(question);
+
+                if (question.type == 'multiple') {
+                    console.log('multiplechoice');
+                } 
+                // true / false question
+                else {
+                    console.log('truefalse');
+
+                }
+            }
         }
         
     }
@@ -94,7 +107,7 @@ $(document).ready(function() {
     // Display countdown to new game start
     socket.on('startCountDown', function(data) {
         $('#gameArea').html($('#start-game-countdown-template').html());
-        role.startTimer(3, $('#startCountdown'), function() {socket.emit('hostNextRound')});
+        role.startTimer(3, $('#startCountdown'), function() {socket.emit('hostNextRound', gameID)});
     });
 
     // Client joined a valid game room
@@ -103,6 +116,13 @@ $(document).ready(function() {
         // Client is a host
         role.joinRoom(data);
     });
+
+
+    socket.on('displayNextRound', function(data) {
+        console.log('displayNextRound reached');
+        role.displayNextRound(data);
+    });
+
 
 
     // Document Interaction Events

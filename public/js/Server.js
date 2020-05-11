@@ -1,6 +1,27 @@
 let io;
 let gameSocket;
+let triviaGame;
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+
+
+class Game {
+
+    constructor() {
+        this.questionIndex = 0;
+
+        // Get trivia questions
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open("GET", 'https://opentdb.com/api.php?amount=10', false); // false for synchronous request
+        xmlHttp.send(null);
+        let response = xmlHttp.responseText;
+        let obj = JSON.parse(response);
+        this.questions = obj.results;
+    }
+
+    getNextQuestion() {
+        return this.questions[this.questionIndex++];
+    }
+}
 
 module.exports.Server = class {
 
@@ -8,7 +29,7 @@ module.exports.Server = class {
         io = sio;
         gameSocket = socket;
         console.log('Connection established');
-        this.triviaGame;
+        triviaGame = new Game();
 
         // Host Events
         gameSocket.on('hostCreateGame', this.hostCreateGame);
@@ -30,27 +51,28 @@ module.exports.Server = class {
         var thisGameId = (Math.random() * 100000) | 0;
         gameSocket.emit('newGameCreated', { gameId: thisGameId, mySocketId: gameSocket.id });
         gameSocket.join(thisGameId);
-        this.triviaGame = new Game();
+        
     }
 
     // Two players have entered the game room
     hostStartGame(gameId) {
-        // setup game logic 
-        // query trivia API
-
+        // query trivia API for questions
+        
         // Display countdown
         // wait 2 seconds before starting
         // TODO: display start button 
         setTimeout(function () { io.sockets.in(gameId).emit('startCountDown', gameId); }, 2000);
-        //io.sockets.in(gameId).emit('startCountDown', gameId);
     }
 
     hostTimeUp() {
 
     }
 
-    hostNextRound() {
+    hostNextRound(gameId) {
         console.log('host next round reached');
+        let question = triviaGame.getNextQuestion();
+        io.sockets.in(gameId).emit('displayNextRound', question);
+
     }
 
     // Player Events
@@ -79,24 +101,5 @@ module.exports.Server = class {
 
     playerDisconnect() {
         console.log('user disconnected');
-    }
-}
-
-class Game {
-    constructor() {
-        var questions = [];
-        this.getQuestions();
-
-    }
-
-    getQuestions() {
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open("GET", 'https://opentdb.com/api.php?amount=10', false); // false for synchronous request
-        xmlHttp.send(null);
-        let response = xmlHttp.responseText;
-        //console.log(response);
-        let obj = JSON.parse(response);
-        let questions = obj.results[1];
-        console.log('\n' + questions);
     }
 }
