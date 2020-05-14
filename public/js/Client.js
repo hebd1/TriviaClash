@@ -22,19 +22,6 @@ $(document).ready(function() {
                     }
                 }, 1000);
             };
-
-            this.displayNextRound = function(question) {
-                console.log(question);
-
-                if (question.type == 'multiple') {
-                    console.log('multiplechoice');
-                } 
-                // true / false question
-                else {
-                    console.log('truefalse');
-
-                }
-            }
         }
         
     }
@@ -64,6 +51,13 @@ $(document).ready(function() {
                     currentRound = 0;
                 }
             };
+
+            this.displayNextRound = function(question) {
+                console.log(question);
+                $('#gameArea').html($('#host-question-template').html());
+                // use atob to decode base64 on the client side
+                $('#hostWord').text(atob(question.question));
+            }
         }
     }
 
@@ -85,6 +79,14 @@ $(document).ready(function() {
                     $('#playerWaitingMessage').append('<p/>').text('Joined game ' + gameID + '. Please wait for the game to begin..');
                 }
             };
+
+            this.displayNextRound = function(question) {
+                if (question.type == 'multiple') {
+                    $('#gameArea').html($('#player-question-template-mc').html());
+                } else {
+                    $('#gameArea').html($('#player-question-template-tf').html());
+                }
+            }
         }
     }
 
@@ -107,7 +109,11 @@ $(document).ready(function() {
     // Display countdown to new game start
     socket.on('startCountDown', function(data) {
         $('#gameArea').html($('#start-game-countdown-template').html());
-        role.startTimer(3, $('#startCountdown'), function() {socket.emit('hostNextRound', gameID)});
+        if (role instanceof Host) {
+            role.startTimer(3, $('#startCountdown'), function() {socket.emit('hostNextRound', gameID)});
+        } else {
+            role.startTimer(3, $('#startCountdown'), function() {socket.emit('playerNextRound', gameID)});
+        }
     });
 
     // Client joined a valid game room

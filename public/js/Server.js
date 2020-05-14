@@ -11,14 +11,16 @@ class Game {
 
         // Get trivia questions
         var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open("GET", 'https://opentdb.com/api.php?amount=10', false); // false for synchronous request
+        xmlHttp.open("GET", 'https://opentdb.com/api.php?amount=10&encode=base64', false); // false for synchronous request
         xmlHttp.send(null);
         let response = xmlHttp.responseText;
+        console.log(response);
         let obj = JSON.parse(response);
         this.questions = obj.results;
     }
 
     getNextQuestion() {
+        console.log('question index ' + this.questionIndex);
         return this.questions[this.questionIndex++];
     }
 }
@@ -70,8 +72,7 @@ module.exports.Server = class {
 
     hostNextRound(gameId) {
         console.log('host next round reached');
-        let question = triviaGame.getNextQuestion();
-        io.sockets.in(gameId).emit('displayNextRound', question);
+        io.sockets.in(gameId).emit('displayNextRound', triviaGame.getNextQuestion());
 
     }
 
