@@ -57,6 +57,7 @@ $(document).ready(function() {
                 $('#gameArea').html($('#host-question-template').html());
                 // use atob to decode base64 on the client side
                 $('#hostWord').text(atob(question.question));
+                $('#category').text(' ' + atob(question.category));
             }
         }
     }

@@ -22,7 +22,7 @@
         <!-- This is where the templates defined below will be used -->
         <div class="titleWrapper">
     
-            <div class="title">
+            <div class="title" id="game_title">
                 TriviaClash
             </div>
 
@@ -124,8 +124,9 @@
 
      <!--  -->
      <script id="host-question-template" type="text/template">
-        <div id="wordArea">
-            <div id="hostWord">5</div>
+        <div id="wordArea" class="container">
+            <div id="category_div" class="row"><span>Category: </span><span id="category"></span></div>
+            <div id="hostWord" class="row"></div>
         </div>
         <div id="playerScores">
             <div id="player1Score" class="playerScore">

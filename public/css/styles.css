@@ -232,7 +232,6 @@ html, body {
     font-weight: 400;
     position: absolute;
     height: 50%;
-    width: 50%;
     margin: auto;
     bottom: 0;
     left: 0;
@@ -240,7 +239,16 @@ html, body {
     right: 0;
 }
 
+#category_div {
+    font-size: 2rem;
+}
+
+#game_title {
+    font-size: 6rem;
+}
+
 #hostWord {
+    font-size: 4rem;
     height: 100%;
     width: 100%;
 }
@@ -294,7 +302,7 @@ html, body {
 
 .playerScore .score {
     text-align: center;
-    background-color: #A8FF56;
+    background-color: #003366;
 }
 
 .playerScore .playerName {
