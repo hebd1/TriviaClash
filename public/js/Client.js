@@ -15,10 +15,13 @@ $(document).ready(function() {
              this.startTimer = function (seconds, display, callback) {
                 var duration = seconds;
                 var t = setInterval(function () {
-                    display.text(seconds);
-                    if (--seconds == 0) {
-                        callback();
+                    seconds--;
+                    if (seconds > 0) {
+                        display.text(seconds);
+                    }
+                    else if (seconds < 0) {
                         clearInterval(t);
+                        callback();
                     }
                 }, 1000);
             };
@@ -57,7 +60,7 @@ $(document).ready(function() {
                 $('#gameArea').html($('#host-question-template').html());
                 // use atob to decode base64 on the client side
                 $('#hostWord').text(atob(question.question));
-                $('#category').text(' ' + atob(question.category));
+                $('#category').text(atob(question.category));
             }
         }
     }
@@ -82,8 +85,12 @@ $(document).ready(function() {
             };
 
             this.displayNextRound = function(question) {
-                if (question.type == 'multiple') {
+                if (atob(question.type) == 'multiple') {
                     $('#gameArea').html($('#player-question-template-mc').html());
+                    let i;
+                    for (i = 0; i < 4; i++) {
+                        $('#question_' + i).text(atob(question.answers[i]));
+                    }
                 } else {
                     $('#gameArea').html($('#player-question-template-tf').html());
                 }
@@ -111,9 +118,10 @@ $(document).ready(function() {
     socket.on('startCountDown', function(data) {
         $('#gameArea').html($('#start-game-countdown-template').html());
         if (role instanceof Host) {
-            role.startTimer(3, $('#startCountdown'), function() {socket.emit('hostNextRound', gameID)});
+            role.startTimer(4, $('#startCountdown'), function() {socket.emit('hostNextRound', gameID)});
         } else {
-            role.startTimer(3, $('#startCountdown'), function() {socket.emit('playerNextRound', gameID)});
+            // Display character or logo
+            // role.startTimer(3, $('#startCountdown'), function() {socket.emit('playerNextRound', gameID)});
         }
     });
 
@@ -127,6 +135,7 @@ $(document).ready(function() {
 
     socket.on('displayNextRound', function(data) {
         console.log('displayNextRound reached');
+        console.log(data);
         role.displayNextRound(data);
     });
 

@@ -114,7 +114,41 @@
 
     <!-- displays play options for a multiple choice question -->
     <script id="player-question-template-mc" type="text/template">
-        
+        <div class="player_banner">
+            <p class="text-center" id="player_name">
+                Name
+            </p>
+        </div>
+        <div class="answers_mc container">
+            <div class="row text-center">
+                <div class="col-12">
+                    <p id="question_0">
+                    
+                    </p>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col-12">
+                    <p id="question_1">
+    
+                    </p>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col-12">
+                    <p id="question_2">
+                        
+                    </p>
+                </div>
+            </div>  
+            <div class="row text-center">
+                <div class="col-12">
+                    <p id="question_3">
+                        q1
+                    </p>
+                </div>
+            </div>
+        </div>
     </script>
 
     <!-- displays play options for a true/false question -->
@@ -125,7 +159,7 @@
      <!--  -->
      <script id="host-question-template" type="text/template">
         <div id="wordArea" class="container">
-            <div id="category_div" class="row"><span>Category: </span><span id="category"></span></div>
+            <div id="category_div" class="row"><span id="category"></span></div>
             <div id="hostWord" class="row"></div>
         </div>
         <div id="playerScores">

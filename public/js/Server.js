@@ -8,6 +8,7 @@ class Game {
 
     constructor() {
         this.questionIndex = 0;
+        this.correct_index = 0;
 
         // Get trivia questions
         var xmlHttp = new XMLHttpRequest();
@@ -19,9 +20,20 @@ class Game {
         this.questions = obj.results;
     }
 
-    getNextQuestion() {
-        console.log('question index ' + this.questionIndex);
-        return this.questions[this.questionIndex++];
+    getRoundPayload() {
+        let obj = this.questions[this.questionIndex++];
+        let a_array = obj.incorrect_answers;
+        this.correct_index =  Math.floor(Math.random() * Math.floor(4));
+        a_array.splice(this.correct_index, 0, obj.correct_answer);
+        console.log('correct index: ' + this.correct_index);
+        let payload = {
+            "type": obj.type,
+            "question" : obj.question,
+            "category": obj.category,
+            "answers" : a_array
+        }
+
+        return payload;
     }
 }
 
@@ -31,7 +43,6 @@ module.exports.Server = class {
         io = sio;
         gameSocket = socket;
         console.log('Connection established');
-        triviaGame = new Game();
 
         // Host Events
         gameSocket.on('hostCreateGame', this.hostCreateGame);
@@ -53,16 +64,11 @@ module.exports.Server = class {
         var thisGameId = (Math.random() * 100000) | 0;
         gameSocket.emit('newGameCreated', { gameId: thisGameId, mySocketId: gameSocket.id });
         gameSocket.join(thisGameId);
-        
+        triviaGame = new Game();
     }
 
     // Two players have entered the game room
     hostStartGame(gameId) {
-        // query trivia API for questions
-        
-        // Display countdown
-        // wait 2 seconds before starting
-        // TODO: display start button 
         setTimeout(function () { io.sockets.in(gameId).emit('startCountDown', gameId); }, 2000);
     }
 
@@ -72,7 +78,7 @@ module.exports.Server = class {
 
     hostNextRound(gameId) {
         console.log('host next round reached');
-        io.sockets.in(gameId).emit('displayNextRound', triviaGame.getNextQuestion());
+        io.sockets.in(gameId).emit('displayNextRound', triviaGame.getRoundPayload());
 
     }
 
