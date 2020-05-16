@@ -27,6 +27,7 @@ html, body {
     height: 100%;
     width: 49%;
     margin-bottom: 0;
+    margin-top: 1rem;
     color: #ECFFE0;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
@@ -174,6 +175,15 @@ html, body {
     padding-top: 1%;
 }
 
+.row {
+    margin-bottom: 3rem;
+    margin-top: 3rem;
+}
+
+.btn-outline-secondary {
+    width: 100%;
+}
+
 .player_banner {
     font-size: 4rem;
     background: #003366;
@@ -186,7 +196,7 @@ html, body {
 .answers_mc {
     font-family: 'Quicksand', sans-serif;
     font-weight: 400;
-    font-size: 3rem;
+    font-size: 14px;
     height: 80%;
     width: 100%;
 }
@@ -257,15 +267,15 @@ html, body {
 }
 
 #category_div {
-    font-size: 2rem;
+    font-size: 1.25rem;
 }
 
 #game_title {
-    font-size: 6rem;
+    font-size: 4rem;
 }
 
 #hostWord {
-    font-size: 4rem;
+    font-size: 2rem;
     height: 100%;
     width: 100%;
 }

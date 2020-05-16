@@ -9,6 +9,8 @@ class Game {
     constructor() {
         this.questionIndex = 0;
         this.correct_index = 0;
+        this.round = 0;
+        this.answerArray = [];
 
         // Get trivia questions
         var xmlHttp = new XMLHttpRequest();
@@ -22,15 +24,15 @@ class Game {
 
     getRoundPayload() {
         let obj = this.questions[this.questionIndex++];
-        let a_array = obj.incorrect_answers;
+        this.answerArray = obj.incorrect_answers;
         this.correct_index =  Math.floor(Math.random() * Math.floor(4));
-        a_array.splice(this.correct_index, 0, obj.correct_answer);
+        this.answerArray.splice(this.correct_index, 0, obj.correct_answer);
         console.log('correct index: ' + this.correct_index);
         let payload = {
             "type": obj.type,
             "question" : obj.question,
             "category": obj.category,
-            "answers" : a_array
+            "answers" : this.answerArray
         }
 
         return payload;
@@ -49,6 +51,7 @@ module.exports.Server = class {
         gameSocket.on('hostRoomFull', this.hostStartGame);
         gameSocket.on('hostTimeUp', this.hostTimeUp);
         gameSocket.on('hostNextRound', this.hostNextRound);
+        gameSocket.on('hostDisplayCorrectAnswer', this.hostDisplayCorrectAnswer);
 
         // Player Events
         gameSocket.on('playerRequestJoin', this.playerRequestJoin);
@@ -72,6 +75,17 @@ module.exports.Server = class {
         setTimeout(function () { io.sockets.in(gameId).emit('startCountDown', gameId); }, 2000);
     }
 
+    hostDisplayCorrectAnswer(gameId) {
+        console.log('display correct answer reached');
+
+        let payload = {
+            "index" : triviaGame.correct_index,
+            "answer" : triviaGame.answerArray[triviaGame.correct_index]
+        }
+
+        io.sockets.in(gameId).emit('endRound', payload);
+    }
+
     hostTimeUp() {
 
     }
@@ -88,17 +102,22 @@ module.exports.Server = class {
 
         // verify roome exists
         if (io.sockets.adapter.rooms[data.gameId] != undefined) {
+            console.log('joined');
             data.mySocketId = gameSocket.id;
             gameSocket.join(data.gameId);
             io.sockets.in(data.gameId).emit('clientJoinedRoom', data);
         } else {
+            console.log('didnt join');
             this.emit('error', { message: 'unable to join room' });
         }
 
 
     }
 
-    playerAnswer() {
+    // player selected an answer
+    playerAnswer(data) {
+        console.log('player answered: ' + data.index);
+        io.sockets.in(data.gameId).emit('hostIncrementAnswers');
 
     }
 

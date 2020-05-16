@@ -38,15 +38,16 @@ $(document).ready(function() {
             let players = [];
             let isNewGame = false;
             let numPlayers = 0;
-            let correctAnsser = '';
+            let numAnswered = 0;
 
             this.joinRoom = function (data) {
                 if (isNewGame) {
                     $('#gameArea').html($('#create-game-template').html());
+                    this.numPlayers = 0;
                 }
                 // Update the lobby screen
-                $('#playersWaiting').append('<p/>').text('Player ' + data.name + ' joined the game!');
-                players.push(data);
+                $('#playersWaiting').append('<p>Player ' + data.name + ' joined the game! <p/>');
+                players.push(data.name);
                 numPlayers += 1;
                 if (numPlayers == 2) {
                     console.log('Room is full!');
@@ -58,10 +59,26 @@ $(document).ready(function() {
             this.displayNextRound = function(question) {
                 console.log(question);
                 $('#gameArea').html($('#host-question-template').html());
+                $('#p1').text(players[0]);
+                $('#p2').text(players[1]);
                 // use atob to decode base64 on the client side
                 $('#hostWord').text(atob(question.question));
                 $('#category').text(atob(question.category));
             }
+
+            this.incrementAnswers = function() {
+                numAnswered++;
+                console.log('numAnswered: ' + numAnswered);
+                console.log('numPlayers' + numPlayers);
+                if (numAnswered == numPlayers) {
+                    socket.emit('hostDisplayCorrectAnswer', gameID);
+                    numAnswered = 0;
+                }
+            }
+
+            this.endRound = function(data) {
+                $('#hostWord').text('Correct Answer: \n' + atob(data.answer));
+            };
         }
     }
 
@@ -73,6 +90,7 @@ $(document).ready(function() {
             super();
             let hostSocketId = '';
             let name = data.name;
+            this.answeredIndex = 0;
 
             this.joinRoom = function (data) {
                 console.log('client is a player;)');
@@ -85,15 +103,30 @@ $(document).ready(function() {
             };
 
             this.displayNextRound = function(question) {
+                $('#gameArea').html($('#player-question-template').html());
+                $('#player_name').text(name);
                 if (atob(question.type) == 'multiple') {
-                    $('#gameArea').html($('#player-question-template-mc').html());
+                    $('#answer-template').html($('#player-inner-mc-template').html());
                     let i;
                     for (i = 0; i < 4; i++) {
-                        $('#question_' + i).text(atob(question.answers[i]));
+                        $('#' + i).text(atob(question.answers[i]));
                     }
                 } else {
-                    $('#gameArea').html($('#player-question-template-tf').html());
+                    $('#answer-template').html($('#player-inner-tf-template').html());
                 }
+            }
+
+            this.endRound = function(data) {
+                $('#answer-template').html($('#player-end-round-template').html());
+                if (this.answeredIndex == data.index) {
+                    $('#result_text').text('Correct!');
+                } else {
+                    $('#result_text').text('Incorect!');
+                }
+            };
+
+            this.setAnswer = function(index) {
+                this.answeredIndex = index;
             }
         }
     }
@@ -139,6 +172,15 @@ $(document).ready(function() {
         role.displayNextRound(data);
     });
 
+    socket.on('hostIncrementAnswers', function() {
+        if (role instanceof Host) role.incrementAnswers();
+    })
+
+    socket.on('endRound', function (data) {
+        console.log('end round reached');
+        role.endRound(data);
+    })
+
 
 
     // Document Interaction Events
@@ -151,6 +193,18 @@ $(document).ready(function() {
    
     $(document).on('click', '#btnJoinGame', function() {
         $('#gameArea').html($('#join-game-template').html());
+    });
+
+    $(document).on('click', '.btn-outline-secondary', function(event) {
+        $('#answer-template').html($('#player-wait-template').html());
+        q = event.target.id;
+        console.log('target id: ' + q);
+        role.setAnswer(q);
+        let data = {
+            gameId : gameID,
+            index: q
+        }
+        socket.emit('playerAnswer', data);
     });
 
     // Join Game Page events

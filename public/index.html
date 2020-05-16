@@ -90,10 +90,12 @@
         </div>
     </script>
 
-    <!-- This is the 'Host' screen. It displays the word for each player to match -->
-    <script id="host-game-template" type="text/template">
-        <div id="wordArea">
-            <div id="hostWord">5</div>
+
+    <!-- Host ended round, display answer -->
+    <script id="host-end-round-template" type="text/template">
+        <div id="wordArea" class="container">
+            <div id="category_div" class="row"><span id="category"></span></div>
+            <div id="hostWord" class="row"></div>
         </div>
         <div id="playerScores">
             <div id="player1Score" class="playerScore">
@@ -112,51 +114,76 @@
         </div>
     </script>
 
-    <!-- displays play options for a multiple choice question -->
-    <script id="player-question-template-mc" type="text/template">
+    <!-- displays player answer options -->
+    <script id="player-question-template" type="text/template">
         <div class="player_banner">
             <p class="text-center" id="player_name">
                 Name
             </p>
         </div>
-        <div class="answers_mc container">
+        <div id="answer-template">
+            
+        </div>
+    </script>
+
+    <!-- Displays multiple choice answers -->
+    <script id="player-inner-mc-template" type="text/template">
+         <div class="answers_mc container">
             <div class="row text-center">
                 <div class="col-12">
-                    <p id="question_0">
-                    
-                    </p>
+                    <button type="button" id="0" class="btn btn-outline-secondary">
+
+                    </button>
                 </div>
             </div>
             <div class="row text-center">
                 <div class="col-12">
-                    <p id="question_1">
-    
-                    </p>
+                    <button type="button" id="1" class="btn btn-outline-secondary">
+
+                    </button>
                 </div>
             </div>
             <div class="row text-center">
                 <div class="col-12">
-                    <p id="question_2">
-                        
-                    </p>
+                    <button type="button" id="2" class="btn btn-outline-secondary">
+
+                    </button>
                 </div>
             </div>  
             <div class="row text-center">
                 <div class="col-12">
-                    <p id="question_3">
-                        q1
-                    </p>
+                    <button type="button" id="3" class="btn btn-outline-secondary">
+
+                    </button>
                 </div>
             </div>
         </div>
     </script>
 
     <!-- displays play options for a true/false question -->
-    <script id="player-question-template-tf" type="text/template">
-        
+    <script id="player-inner-tf-template" type="text/template">
+        <p>true/false</p>
     </script>
 
-     <!--  -->
+    <!-- Waiting screen after answer submission -->
+    <script id="player-wait-template" type="text/template">
+        <div class="wait">
+            <p>
+                Submmitted!
+            </p>
+        </div>
+    </script>
+
+    <!-- Display correct or incorrect answered -->
+    <script id="player-end-round-template" type="text/template">
+        <div class="result">
+            <p id="result_text">
+                
+            </p>
+        </div>
+    </script>
+
+     <!-- displays host question and player scores -->
      <script id="host-question-template" type="text/template">
         <div id="wordArea" class="container">
             <div id="category_div" class="row"><span id="category"></span></div>
@@ -164,10 +191,10 @@
         </div>
         <div id="playerScores">
             <div id="player1Score" class="playerScore">
-                <span class="score">0</span><span class="playerName">Player 1</span>
+                <span class="score">0</span><span class="playerName" id="p1">Player 1</span>
             </div>
             <div id="player2Score" class="playerScore">
-                <span class="playerName">Player 2</span><span class="score">0</span>
+                <span class="playerName" id="p2">Player 2</span><span class="score">0</span>
             </div>
         </div>
      </script>
