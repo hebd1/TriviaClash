@@ -22,7 +22,7 @@ class Game {
         this.questions = obj.results;
     }
 
-    getRoundPayload() {
+    getStartPayload() {
         let obj = this.questions[this.questionIndex++];
         this.answerArray = obj.incorrect_answers;
         this.correct_index =  Math.floor(Math.random() * Math.floor(4));
@@ -33,6 +33,15 @@ class Game {
             "question" : obj.question,
             "category": obj.category,
             "answers" : this.answerArray
+        }
+
+        return payload;
+    }
+
+    getEndPayload() {
+        let payload = {
+            "index" : triviaGame.correct_index,
+            "answer" : triviaGame.answerArray[triviaGame.correct_index]
         }
 
         return payload;
@@ -77,22 +86,17 @@ module.exports.Server = class {
 
     hostDisplayCorrectAnswer(gameId) {
         console.log('display correct answer reached');
-
-        let payload = {
-            "index" : triviaGame.correct_index,
-            "answer" : triviaGame.answerArray[triviaGame.correct_index]
-        }
-
-        io.sockets.in(gameId).emit('endRound', payload);
+        io.sockets.in(gameId).emit('endRound', triviaGame.getEndPayload());
     }
 
-    hostTimeUp() {
-
+    hostTimeUp(gameId) {
+        console.log('time up reached');
+        io.sockets.in(gameId).emit('endRound', triviaGame.getEndPayload());
     }
 
     hostNextRound(gameId) {
         console.log('host next round reached');
-        io.sockets.in(gameId).emit('displayNextRound', triviaGame.getRoundPayload());
+        io.sockets.in(gameId).emit('displayNextRound', triviaGame.getStartPayload());
 
     }
 
@@ -110,15 +114,12 @@ module.exports.Server = class {
             console.log('didnt join');
             this.emit('error', { message: 'unable to join room' });
         }
-
-
     }
 
     // player selected an answer
     playerAnswer(data) {
         console.log('player answered: ' + data.index);
         io.sockets.in(data.gameId).emit('hostIncrementAnswers');
-
     }
 
     playerRestart() {

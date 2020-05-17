@@ -162,7 +162,22 @@
 
     <!-- displays play options for a true/false question -->
     <script id="player-inner-tf-template" type="text/template">
-        <p>true/false</p>
+        <div class="answers_tf container">
+            <div class="row text-center">
+                <div class="col-12">
+                    <button type="button" id="0" class="btn btn-outline-secondary">
+                        True
+                    </button>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col-12">
+                    <button type="button" id="1" class="btn btn-outline-secondary">
+                        False
+                    </button>
+                </div>
+            </div>
+        </div>
     </script>
 
     <!-- Waiting screen after answer submission -->
@@ -186,8 +201,25 @@
      <!-- displays host question and player scores -->
      <script id="host-question-template" type="text/template">
         <div id="wordArea" class="container">
-            <div id="category_div" class="row"><span id="category"></span></div>
-            <div id="hostWord" class="row"></div>
+            <div class="row">
+                <div class="col-12">
+                    <p id="timer">
+                        0
+                    </p>
+                </div>
+            </div>
+            <div id="category_div" class="row">
+                <div class="col-12">
+                    <span id="category"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div id="hostWord">
+    
+                    </div>
+                </div>
+            </div>
         </div>
         <div id="playerScores">
             <div id="player1Score" class="playerScore">

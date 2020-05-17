@@ -19,7 +19,7 @@ $(document).ready(function() {
                     if (seconds > 0) {
                         display.text(seconds);
                     }
-                    else if (seconds < 0) {
+                    else if (seconds <= 0) {
                         clearInterval(t);
                         callback();
                     }
@@ -64,6 +64,7 @@ $(document).ready(function() {
                 // use atob to decode base64 on the client side
                 $('#hostWord').text(atob(question.question));
                 $('#category').text(atob(question.category));
+                this.startTimer(9, $('#timer'), function() {socket.emit('hostTimeUp', gameID)});
             }
 
             this.incrementAnswers = function() {
@@ -78,6 +79,7 @@ $(document).ready(function() {
 
             this.endRound = function(data) {
                 $('#hostWord').text('Correct Answer: \n' + atob(data.answer));
+                $('#timer').text('');
             };
         }
     }
@@ -90,7 +92,7 @@ $(document).ready(function() {
             super();
             let hostSocketId = '';
             let name = data.name;
-            this.answeredIndex = 0;
+            this.answeredIndex = 5;
 
             this.joinRoom = function (data) {
                 console.log('client is a player;)');
@@ -119,9 +121,9 @@ $(document).ready(function() {
             this.endRound = function(data) {
                 $('#answer-template').html($('#player-end-round-template').html());
                 if (this.answeredIndex == data.index) {
-                    $('#result_text').text('Correct!');
+                    $('#result_text').text('Nice one!');
                 } else {
-                    $('#result_text').text('Incorect!');
+                    $('#result_text').text('Oof! Too bad..');
                 }
             };
 
