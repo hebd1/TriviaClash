@@ -57,8 +57,11 @@ module.exports.Server = class {
 
         // Host Events
         gameSocket.on('hostCreateGame', this.hostCreateGame);
-        gameSocket.on('hostRoomFull', this.hostStartGame);
+        gameSocket.on('hostUpdateScore', this.hostUpdateScore);
+        gameSocket.on('hostRoomFull', this.hostRoomFull);
         gameSocket.on('hostTimeUp', this.hostTimeUp);
+        gameSocket.on('hostStartGame', this.hostStartGame);
+        gameSocket.on('hostEndGame', this.hostEndGame);
         gameSocket.on('hostNextRound', this.hostNextRound);
         gameSocket.on('hostDisplayCorrectAnswer', this.hostDisplayCorrectAnswer);
 
@@ -81,7 +84,22 @@ module.exports.Server = class {
 
     // Two players have entered the game room
     hostStartGame(gameId) {
-        setTimeout(function () { io.sockets.in(gameId).emit('startCountDown', gameId); }, 2000);
+        io.sockets.in(gameId).emit('startGame');
+    }
+
+    hostUpdateScore(data) {
+        console.log('host update score reached');
+        io.sockets.in(data.gameId).emit('hostDisplayScore', data);
+
+    }
+
+    hostEndGame (data) {
+        console.log('host end game reached');
+    }
+
+    hostRoomFull(gameId) {
+        console.log('host room full reached');
+        setTimeout(function () { io.sockets.in(gameId).emit('playerStartCountdown'); }, 2000);
     }
 
     hostDisplayCorrectAnswer(gameId) {
@@ -119,7 +137,7 @@ module.exports.Server = class {
     // player selected an answer
     playerAnswer(data) {
         console.log('player answered: ' + data.index);
-        io.sockets.in(data.gameId).emit('hostIncrementAnswers');
+        io.sockets.in(data.gameId).emit('hostIncrementAnswers', data);
     }
 
     playerRestart() {

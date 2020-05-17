@@ -39,6 +39,7 @@ $(document).ready(function() {
             let isNewGame = false;
             let numPlayers = 0;
             let numAnswered = 0;
+            let round = 0;
 
             this.joinRoom = function (data) {
                 if (isNewGame) {
@@ -56,31 +57,60 @@ $(document).ready(function() {
                 }
             };
 
-            this.displayNextRound = function(question) {
-                console.log(question);
+            this.startGame = function() {
                 $('#gameArea').html($('#host-question-template').html());
                 $('#p1').text(players[0]);
                 $('#p2').text(players[1]);
-                // use atob to decode base64 on the client side
-                $('#hostWord').text(atob(question.question));
-                $('#category').text(atob(question.category));
-                this.startTimer(9, $('#timer'), function() {socket.emit('hostTimeUp', gameID)});
+                socket.emit('hostNextRound', gameID);
             }
 
-            this.incrementAnswers = function() {
-                numAnswered++;
-                console.log('numAnswered: ' + numAnswered);
-                console.log('numPlayers' + numPlayers);
-                if (numAnswered == numPlayers) {
-                    socket.emit('hostDisplayCorrectAnswer', gameID);
-                    numAnswered = 0;
+            this.displayNextRound = function(question) {
+                console.log(question);
+                // use atob to decode base64 on the client side
+                $('#timer').text('10');
+                $('#hostWord').text(atob(question.question));
+                $('#category').text(atob(question.category));
+                this.startTimer(10, $('#timer'), function() {socket.emit('hostTimeUp', gameID)});
+            }
+
+            this.incrementAnswers = function(data) {
+                // make sure rounds match up to avoid a late response
+                if (round == data.round) {
+                    numAnswered++;
+                    console.log('numAnswered: ' + numAnswered);
+                    console.log('numPlayers' + numPlayers);
+                    if (numAnswered == numPlayers) {
+                        // just let the timer run out for now
+                        // issue with canceling already started timer
+                       // socket.emit('hostTimeUp', gameID);
+                        numAnswered = 0;
+                    }
                 }
             }
 
             this.endRound = function(data) {
-                $('#hostWord').text('Correct Answer: \n' + atob(data.answer));
-                $('#timer').text('');
+                // Occasional issues with answer received from trivia api not being base64 encoded
+                try {
+                    $('#hostWord').text('Correct Answer: \n' + atob(data.answer));
+                } catch {
+                    $('#hostWord').text('Correct Answer: \n' + data.answer);
+                }
+                $('#timer').text(' ');
+                round++;
+                if (round < 10) {
+                    this.startTimer(4, $(''), function() {socket.emit('hostNextRound', gameID)});
+                } else {
+                    this.startTimer(4, $(''), function() {socket.emit('hostEndGame', gameID)});
+                }
+
             };
+
+            this.updateScore = function(data) {
+                let player_index = players.indexOf(data.pName);
+                let cur_score = parseInt($('#score_' + player_index).text());
+                let new_score = cur_score + parseInt(data.score);
+                $('#score_' + player_index).text(new_score);
+            }
         }
     }
 
@@ -93,6 +123,7 @@ $(document).ready(function() {
             let hostSocketId = '';
             let name = data.name;
             this.answeredIndex = 5;
+            let round = 0;
 
             this.joinRoom = function (data) {
                 console.log('client is a player;)');
@@ -120,15 +151,28 @@ $(document).ready(function() {
 
             this.endRound = function(data) {
                 $('#answer-template').html($('#player-end-round-template').html());
+                let roundScore;
                 if (this.answeredIndex == data.index) {
                     $('#result_text').text('Nice one!');
+                    $('#round_score').text('+10');
+                    roundScore = 10;
                 } else {
                     $('#result_text').text('Oof! Too bad..');
+                    $('#round_score').text('0');
+                    roundScore = 0;
                 }
+                round++;
+                socket.emit('hostUpdateScore', {gameId: gameID, score: roundScore, pName: name});                
             };
 
             this.setAnswer = function(index) {
                 this.answeredIndex = index;
+                let data = {
+                    gameId : gameID,
+                    index : q,
+                    round : round
+                }
+                socket.emit('playerAnswer', data);
             }
         }
     }
@@ -150,14 +194,10 @@ $(document).ready(function() {
     });
 
     // Display countdown to new game start
-    socket.on('startCountDown', function(data) {
+    socket.on('playerStartCountdown', function() {
+        console.log('player start countdown');
         $('#gameArea').html($('#start-game-countdown-template').html());
-        if (role instanceof Host) {
-            role.startTimer(4, $('#startCountdown'), function() {socket.emit('hostNextRound', gameID)});
-        } else {
-            // Display character or logo
-            // role.startTimer(3, $('#startCountdown'), function() {socket.emit('playerNextRound', gameID)});
-        }
+        if (role instanceof Host) role.startTimer(4, $('#startCountdown'), function() {socket.emit('hostStartGame', gameID)});
     });
 
     // Client joined a valid game room
@@ -167,6 +207,11 @@ $(document).ready(function() {
         role.joinRoom(data);
     });
 
+    socket.on('startGame', function () {
+        console.log('start game reached');
+        if (role instanceof Host) role.startGame();
+    });
+
 
     socket.on('displayNextRound', function(data) {
         console.log('displayNextRound reached');
@@ -174,14 +219,19 @@ $(document).ready(function() {
         role.displayNextRound(data);
     });
 
-    socket.on('hostIncrementAnswers', function() {
-        if (role instanceof Host) role.incrementAnswers();
+    socket.on('hostIncrementAnswers', function(data) {
+        if (role instanceof Host) role.incrementAnswers(data);
     })
 
     socket.on('endRound', function (data) {
         console.log('end round reached');
         role.endRound(data);
     })
+
+    socket.on('hostDisplayScore', function (data) {
+        console.log('host displaying updated score');
+        if (role instanceof Host) role.updateScore(data);
+    });
 
 
 
@@ -197,16 +247,12 @@ $(document).ready(function() {
         $('#gameArea').html($('#join-game-template').html());
     });
 
+    // player answered question and clicked an answer
     $(document).on('click', '.btn-outline-secondary', function(event) {
         $('#answer-template').html($('#player-wait-template').html());
         q = event.target.id;
         console.log('target id: ' + q);
         role.setAnswer(q);
-        let data = {
-            gameId : gameID,
-            index: q
-        }
-        socket.emit('playerAnswer', data);
     });
 
     // Join Game Page events
