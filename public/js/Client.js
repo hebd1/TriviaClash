@@ -40,6 +40,9 @@ $(document).ready(function() {
             let numPlayers = 0;
             let numAnswered = 0;
             let round = 0;
+            let topPlayer = '';
+            let topScore = 0;
+            let tie = false;
 
             this.joinRoom = function (data) {
                 if (isNewGame) {
@@ -66,10 +69,9 @@ $(document).ready(function() {
 
             this.displayNextRound = function(question) {
                 console.log(question);
-                // use atob to decode base64 on the client side
                 $('#timer').text('10');
-                $('#hostWord').text(atob(question.question));
-                $('#category').text(atob(question.category));
+                $('#hostWord').text(question.question);
+                $('#category').text(question.category);
                 this.startTimer(10, $('#timer'), function() {socket.emit('hostTimeUp', gameID)});
             }
 
@@ -91,7 +93,7 @@ $(document).ready(function() {
             this.endRound = function(data) {
                 // Occasional issues with answer received from trivia api not being base64 encoded
                 try {
-                    $('#hostWord').text('Correct Answer: \n' + atob(data.answer));
+                    $('#hostWord').text('Correct Answer: \n' + data.answer);
                 } catch {
                     $('#hostWord').text('Correct Answer: \n' + data.answer);
                 }
@@ -109,7 +111,27 @@ $(document).ready(function() {
                 let player_index = players.indexOf(data.pName);
                 let cur_score = parseInt($('#score_' + player_index).text());
                 let new_score = cur_score + parseInt(data.score);
+                if (new_score > topScore) {
+                    topScore = new_score;
+                    topPlayer = data.pName;
+                    tie = false;
+                } else if (data.pName != topPlayer && topScore == new_score) {
+                    tie = true;
+                }
                 $('#score_' + player_index).text(new_score);
+            }
+
+            this.endGame = function() {
+                $('#gameArea').html($('#player-end-game-template').html());
+                if (topScore == 0) {
+                    $('#winner').text('Wow.. Ya\'ll stupid.');
+                    $('#top_score').text('');
+                } else if (tie == true) {
+                    $('#winner').text('Welp! it\'s a tie..');
+                    $('#top_score').text('');
+                }
+                $('#winner').text('Winner: ' + topPlayer);
+                $('#top_score').text('Top Score: ' + topScore);
             }
         }
     }
@@ -138,11 +160,11 @@ $(document).ready(function() {
             this.displayNextRound = function(question) {
                 $('#gameArea').html($('#player-question-template').html());
                 $('#player_name').text(name);
-                if (atob(question.type) == 'multiple') {
+                if (question.type == 'multiple') {
                     $('#answer-template').html($('#player-inner-mc-template').html());
                     let i;
                     for (i = 0; i < 4; i++) {
-                        $('#' + i).text(atob(question.answers[i]));
+                        $('#' + i).text(question.answers[i]);
                     }
                 } else {
                     $('#answer-template').html($('#player-inner-tf-template').html());
@@ -174,6 +196,10 @@ $(document).ready(function() {
                 }
                 socket.emit('playerAnswer', data);
             }
+
+            this.endGame = function() {
+
+            }
         }
     }
 
@@ -191,6 +217,10 @@ $(document).ready(function() {
         $('#gameArea').html($('#create-game-template').html());
         $('#gameURL').text(window.location.href);
         $('#NewGameCode').text(data.gameId)
+    });
+
+    socket.on('endGame', function(data) {
+        role.endGame();
     });
 
     // Display countdown to new game start

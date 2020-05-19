@@ -2,6 +2,7 @@ let io;
 let gameSocket;
 let triviaGame;
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+var Base64 = require('js-base64').Base64;
 
 
 class Game {
@@ -14,7 +15,8 @@ class Game {
 
         // Get trivia questions
         var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open("GET", 'https://opentdb.com/api.php?amount=10&encode=base64', false); // false for synchronous request
+        // xmlHttp.open("GET", 'https://opentdb.com/api.php?amount=10&encode=base64', false); // false for synchronous request
+        xmlHttp.open("GET", 'https://opentdb.com/api.php?amount=10&category=9&encode=base64', false); // false for synchronous request
         xmlHttp.send(null);
         let response = xmlHttp.responseText;
         console.log(response);
@@ -24,14 +26,18 @@ class Game {
 
     getStartPayload() {
         let obj = this.questions[this.questionIndex++];
-        this.answerArray = obj.incorrect_answers;
+        let answerArrayEnc = obj.incorrect_answers;
+        this.answerArray = [];
+        for (var i = 0; i <= answerArrayEnc.length; i++) {
+            this.answerArray.push(Base64.decode(answerArrayEnc[i]));
+        }
         this.correct_index =  Math.floor(Math.random() * Math.floor(4));
-        this.answerArray.splice(this.correct_index, 0, obj.correct_answer);
+        this.answerArray.splice(this.correct_index, 0, Base64.decode(obj.correct_answer));
         console.log('correct index: ' + this.correct_index);
         let payload = {
-            "type": obj.type,
-            "question" : obj.question,
-            "category": obj.category,
+            "type": Base64.decode(obj.type),
+            "question" : Base64.decode(obj.question),
+            "category": Base64.decode(obj.category),
             "answers" : this.answerArray
         }
 
@@ -93,8 +99,9 @@ module.exports.Server = class {
 
     }
 
-    hostEndGame (data) {
+    hostEndGame (gameId) {
         console.log('host end game reached');
+        io.sockets.in(gameId).emit('endGame');
     }
 
     hostRoomFull(gameId) {
