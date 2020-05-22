@@ -198,41 +198,82 @@
 
      <!-- displays host question and player scores -->
      <script id="host-question-template" type="text/template">
-        <div class="row">
-            <div class="col-4">
-                <div id="playerScores">
-                    <div id="player1Score" class="playerScore">
-                        <span class="score" id="score_0">0</span><span class="playerName" id="p1">Player 1</span>
+        <div class="container-fluid h-100">
+            <div id="host_body" class="row justify-content-center align-self-center h-100">
+                <div id="players" class="col-2 h-100 d-flex">
+                    <div class="container flex align-self-center">
+                         <div class="row">
+                        <div id="player1Score" class="playerScore">
+                            <span class="playerName" id="p1">Player 1</span><span class="score" id="score_0">0</span>
+                        </div>
                     </div>
-                    <div id="player2Score" class="playerScore">
-                        <span class="score" id="score_1">0</span><span class="playerName" id="p2">Player 2</span>
+                    <div class="row">
+                          
+                        <div id="player2Score" class="playerScore">
+                            <span class="playerName" id="p2">Player 2</span><span class="score" id="score_1">0</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                          
+                        <div id="player3Score" class="playerScore">
+                            <span class="playerName" id="p3">Player 2</span><span class="score" id="score_2">0</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                          
+                        <div id="player4Score" class="playerScore">
+                            <span class="playerName" id="p4">Player 2</span><span class="score" id="score_3">0</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                          
+                        <div id="player5Score" class="playerScore">
+                            <span class="playerName" id="p5">Player 2</span><span class="score" id="score_4">0</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                          
+                        <div id="player6Score" class="playerScore">
+                            <span class="playerName" id="p6">Player 2</span><span class="score" id="score_5">0</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                          
+                        <div id="player7Score" class="playerScore">
+                            <span class="playerName" id="p2">Player 2</span><span class="score" id="score_6">0</span>
+                        </div>
+                    </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-8">
-                <div id="wordArea" class="container">
-                    <div class="row">
-                        <div class="col">
-                            <span id="timer">
-                                10
-                            </span>
-                        </div>
-                    </div>
-                    <div id="category_div" class="row">
-                        <div class="col">
-                            <span id="category"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div id="hostWord">
-            
+                <div class="col-10 h-100 d-flex">
+                    <div id="wordArea" class="container d-flex align-self-center justify-content-center">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <span id="timer">
+                                        10
+                                    </span>
+                                </div>
                             </div>
-                        </div>
+                            <div id="category_div" class="row">
+                                <div class="col">
+                                    <span id="category"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div id="hostWord">
+                    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>   
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    </div>
      </script>
 
     <!-- JavaScript Libraries -->

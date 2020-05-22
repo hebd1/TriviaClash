@@ -15,6 +15,10 @@ html, body {
     padding: 0;
 }
 
+#host_body {
+    margin-top: 0rem;
+}
+
 
 
 /* ******************************
@@ -316,6 +320,23 @@ html, body {
     margin: 0;
     padding: 0;
     text-transform: uppercase;
+}
+
+.playerName {
+    margin-right: 1rem;
+    margin-top: 1rem;
+    color:white;
+    
+    
+}
+
+
+#players {
+    background-color: blueviolet;
+}
+
+.playerScore {
+    padding-top: 1rem;
 }
 /* 
 #playerScores {
