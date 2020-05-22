@@ -266,13 +266,13 @@ html, body {
 #wordArea {
     font-family: 'Quicksand', sans-serif;
     font-weight: 400;
-    position: absolute;
+    /* position: absolute;
     height: 50%;
     margin: auto;
     bottom: 0;
     left: 0;
     top: 0;
-    right: 0;
+    right: 0; */
 }
 
 #category_div {
@@ -317,7 +317,7 @@ html, body {
     padding: 0;
     text-transform: uppercase;
 }
-
+/* 
 #playerScores {
     height: 10%;
     width: 100%;
@@ -359,7 +359,7 @@ html, body {
 #player2Score {
     float: right;
     text-align: right;
-}
+} */
 
 
 /* ******************************

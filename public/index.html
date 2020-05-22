@@ -198,33 +198,39 @@
 
      <!-- displays host question and player scores -->
      <script id="host-question-template" type="text/template">
-        <div id="wordArea" class="container">
-            <div class="row">
-                <div class="col-12">
-                    <span id="timer">
-                        10
-                    </span>
-                </div>
-            </div>
-            <div id="category_div" class="row">
-                <div class="col-12">
-                    <span id="category"></span>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div id="hostWord">
-    
+        <div class="row">
+            <div class="col-4">
+                <div id="playerScores">
+                    <div id="player1Score" class="playerScore">
+                        <span class="score" id="score_0">0</span><span class="playerName" id="p1">Player 1</span>
+                    </div>
+                    <div id="player2Score" class="playerScore">
+                        <span class="score" id="score_1">0</span><span class="playerName" id="p2">Player 2</span>
                     </div>
                 </div>
             </div>
-        </div>
-        <div id="playerScores">
-            <div id="player1Score" class="playerScore">
-                <span class="score" id="score_0">0</span><span class="playerName" id="p1">Player 1</span>
-            </div>
-            <div id="player2Score" class="playerScore">
-                <span class="playerName" id="p2">Player 2</span><span class="score" id="score_1">0</span>
+            <div class="col-8">
+                <div id="wordArea" class="container">
+                    <div class="row">
+                        <div class="col">
+                            <span id="timer">
+                                10
+                            </span>
+                        </div>
+                    </div>
+                    <div id="category_div" class="row">
+                        <div class="col">
+                            <span id="category"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div id="hostWord">
+            
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
      </script>

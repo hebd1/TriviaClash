@@ -116,13 +116,20 @@ module.exports.Server = class {
 
     hostTimeUp(gameId) {
         console.log('time up reached');
-        io.sockets.in(gameId).emit('endRound', triviaGame.getEndPayload());
+        try {
+            io.sockets.in(gameId).emit('endRound', triviaGame.getEndPayload());
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     hostNextRound(gameId) {
         console.log('host next round reached');
-        io.sockets.in(gameId).emit('displayNextRound', triviaGame.getStartPayload());
-
+        try {
+            io.sockets.in(gameId).emit('displayNextRound', triviaGame.getStartPayload());
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     // Player Events
@@ -153,5 +160,6 @@ module.exports.Server = class {
 
     playerDisconnect() {
         console.log('user disconnected');
+        io.sockets.emit('clientDisconnected', gameSocket.id);
     }
 }
