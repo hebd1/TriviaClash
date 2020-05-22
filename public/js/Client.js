@@ -53,7 +53,12 @@ $(document).ready(function() {
                 $('#playersWaiting').append('<p>Player ' + data.name + ' joined the game! <p/>');
                 players.push(data.name);
                 numPlayers += 1;
-                if (numPlayers == 2) {
+                // first player decides when game starts
+                if (numPlayers == 1) {
+                    console.log('first player joined');
+                    socket.emit('firstPlayerJoined', data);
+                }
+                if (numPlayers == 7) {
                     console.log('Room is full!');
                     socket.emit('hostRoomFull', gameID);
                     currentRound = 0;
@@ -62,8 +67,10 @@ $(document).ready(function() {
 
             this.startGame = function() {
                 $('#gameArea').html($('#host-question-template').html());
-                $('#p1').text(players[0]);
-                $('#p2').text(players[1]);
+                var index;
+                for (index = 0; index < numPlayers; index++) {
+                    $('#p' + index).text(players[index]);
+                }
                 socket.emit('hostNextRound', gameID);
             }
 
@@ -151,6 +158,7 @@ $(document).ready(function() {
                 console.log('client is a player;)');
                 console.log(data.mySocketId);
                 console.log(socket.io.engine.id);
+                socketID = data.mySocketId;
                 if (socket.io.engine.id == data.mySocketId) {
                     gameID = data.gameId;
                     $('#playerWaitingMessage').append('<p/>').text('Joined game ' + gameID + '. Please wait for the game to begin..');
@@ -186,6 +194,11 @@ $(document).ready(function() {
                 round++;
                 socket.emit('hostUpdateScore', {gameId: gameID, score: roundScore, pName: name});                
             };
+
+            this.displayStartButton = function() {
+                console.log('display start button inner reached');
+                $('#gameArea').html($('#player-start-button-template').html());
+            }
 
             this.setAnswer = function(index) {
                 this.answeredIndex = index;
@@ -237,6 +250,11 @@ $(document).ready(function() {
         role.joinRoom(data);
     });
 
+    socket.on('clientDisplayStartButton', function (data) {
+        console.log('clientDisplayStartButton reached');
+        if (role instanceof Player && data.mySocketId == socketID) role.displayStartButton();
+    });
+
     socket.on('startGame', function () {
         console.log('start game reached');
         if (role instanceof Host) role.startGame();
@@ -272,6 +290,9 @@ $(document).ready(function() {
         socket.emit('hostCreateGame');
     });
 
+    $(document).on('click', '#start_game_btn', function() {
+        socket.emit('hostRoomFull', gameID);
+    });
    
     $(document).on('click', '#btnJoinGame', function() {
         $('#gameArea').html($('#join-game-template').html());

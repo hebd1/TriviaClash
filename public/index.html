@@ -184,6 +184,17 @@
         </div>
     </script>
 
+     <!-- Display Start game button to first player that joins -->
+     <script id="player-start-button-template" type="text/template">
+        <div class="container">
+            <div class="row">
+              <div class="col text-center">
+                <button id="start_game_btn" type="button" class="btn btn-light">Start Game</button>
+            </div>
+            </div>
+          </div>
+    </script>
+
     <!-- Display Game Winner -->
     <script id="player-end-game-template" type="text/template">
         <div class="result">
@@ -203,44 +214,44 @@
                 <div id="players" class="col-2 h-100 d-flex">
                     <div class="container flex align-self-center">
                          <div class="row">
+                        <div id="player0Score" class="playerScore">
+                            <span class="playerName" id="p0">Player 1</span><span class="score" id="score_0">0</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                          
                         <div id="player1Score" class="playerScore">
-                            <span class="playerName" id="p1">Player 1</span><span class="score" id="score_0">0</span>
+                            <span class="playerName" id="p1">Player 2</span><span class="score" id="score_1">0</span>
                         </div>
                     </div>
                     <div class="row">
                           
                         <div id="player2Score" class="playerScore">
-                            <span class="playerName" id="p2">Player 2</span><span class="score" id="score_1">0</span>
+                            <span class="playerName" id="p2">Player 2</span><span class="score" id="score_2">0</span>
                         </div>
                     </div>
                     <div class="row">
                           
                         <div id="player3Score" class="playerScore">
-                            <span class="playerName" id="p3">Player 2</span><span class="score" id="score_2">0</span>
+                            <span class="playerName" id="p3">Player 2</span><span class="score" id="score_3">0</span>
                         </div>
                     </div>
                     <div class="row">
                           
                         <div id="player4Score" class="playerScore">
-                            <span class="playerName" id="p4">Player 2</span><span class="score" id="score_3">0</span>
+                            <span class="playerName" id="p4">Player 2</span><span class="score" id="score_4">0</span>
                         </div>
                     </div>
                     <div class="row">
                           
                         <div id="player5Score" class="playerScore">
-                            <span class="playerName" id="p5">Player 2</span><span class="score" id="score_4">0</span>
+                            <span class="playerName" id="p5">Player 2</span><span class="score" id="score_5">0</span>
                         </div>
                     </div>
                     <div class="row">
                           
                         <div id="player6Score" class="playerScore">
-                            <span class="playerName" id="p6">Player 2</span><span class="score" id="score_5">0</span>
-                        </div>
-                    </div>
-                    <div class="row">
-                          
-                        <div id="player7Score" class="playerScore">
-                            <span class="playerName" id="p2">Player 2</span><span class="score" id="score_6">0</span>
+                            <span class="playerName" id="p6">Player 2</span><span class="score" id="score_6">0</span>
                         </div>
                     </div>
                     </div>

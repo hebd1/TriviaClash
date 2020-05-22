@@ -76,6 +76,7 @@ module.exports.Server = class {
         gameSocket.on('playerAnswer', this.playerAnswer);
         gameSocket.on('playerRestart', this.playerRestart);
         gameSocket.on('disconnect', this.playerDisconnect);
+        gameSocket.on('firstPlayerJoined', this.firstPlayerJoined);
     }
 
     // Host Functions
@@ -156,6 +157,11 @@ module.exports.Server = class {
 
     playerRestart() {
 
+    }
+
+    firstPlayerJoined(data) {
+        console.log('first player joined reached');
+        io.sockets.in(data.gameId).emit('clientDisplayStartButton', data);
     }
 
     playerDisconnect() {
