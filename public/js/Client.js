@@ -36,6 +36,7 @@ $(document).ready(function() {
 
             super();
             let players = [];
+            let IDs = [];
             let isNewGame = false;
             let numPlayers = 0;
             let numAnswered = 0;
@@ -52,6 +53,7 @@ $(document).ready(function() {
                 // Update the lobby screen
                 $('#playersWaiting').append('<p>Player ' + data.name + ' joined the game! <p/>');
                 players.push(data.name);
+                IDs.push(data.mySocketId);
                 numPlayers += 1;
                 // first player decides when game starts
                 if (numPlayers == 1) {
@@ -140,6 +142,30 @@ $(document).ready(function() {
                 $('#winner').text('Winner: ' + topPlayer);
                 $('#top_score').text('Top Score: ' + topScore);
             }
+
+            this.removePlayer = function(player_Id) {
+                console.log('client disconnected reached');
+
+                if (IDs.includes(player_Id)) {
+                    console.log('removing player');
+                    console.log(IDs);
+                    console.log(players);
+                    let i = IDs.indexOf(player_Id);
+                    console.log(i);
+                    IDs.splice(i, 1);
+                    players.splice(i, 1);
+                    $('#player' + i + 'Score').remove();
+                    console.log(IDs);
+                    console.log(players);
+    
+                    // End the game if there aren't enough players
+                    if (IDs.length == 0) {
+                        $('#gameArea').html($('#player-end-game-template').html());
+                        $('#winner').text('Error: Not enough active players to continue..');
+                    }
+                }
+               
+            }
         }
     }
 
@@ -155,7 +181,6 @@ $(document).ready(function() {
             let round = 0;
 
             this.joinRoom = function (data) {
-                console.log('client is a player;)');
                 console.log(data.mySocketId);
                 console.log(socket.io.engine.id);
                 socketID = data.mySocketId;
@@ -281,6 +306,9 @@ $(document).ready(function() {
         if (role instanceof Host) role.updateScore(data);
     });
 
+    socket.on('clientDisconnected', function (player_Id) {
+        if (role instanceof Host) role.removePlayer(player_Id);
+    });
 
 
     // Document Interaction Events
@@ -311,7 +339,8 @@ $(document).ready(function() {
         console.log('start button clicked');
         let data = {
             gameId : $('#inputGameId').val(),
-            name : $('#inputPlayerName').val() || 'Anonymous'
+            name : $('#inputPlayerName').val() || 'Anonymous',
+            mySocketId : socket.id
         };
 
         socket.emit('playerRequestJoin', data);

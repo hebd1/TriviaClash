@@ -1,5 +1,6 @@
 let io;
 let gameSocket;
+let socketid;
 let triviaGame;
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var Base64 = require('js-base64').Base64;
@@ -59,6 +60,7 @@ module.exports.Server = class {
     constructor(sio, socket) {
         io = sio;
         gameSocket = socket;
+        socketid = socket.id;
         console.log('Connection established');
 
         // Host Events
@@ -75,7 +77,6 @@ module.exports.Server = class {
         gameSocket.on('playerRequestJoin', this.playerRequestJoin);
         gameSocket.on('playerAnswer', this.playerAnswer);
         gameSocket.on('playerRestart', this.playerRestart);
-        gameSocket.on('disconnect', this.playerDisconnect);
         gameSocket.on('firstPlayerJoined', this.firstPlayerJoined);
     }
 
@@ -140,7 +141,7 @@ module.exports.Server = class {
         // verify roome exists
         if (io.sockets.adapter.rooms[data.gameId] != undefined) {
             console.log('joined');
-            data.mySocketId = gameSocket.id;
+            // data.mySocketId = gameSocket.id;
             gameSocket.join(data.gameId);
             io.sockets.in(data.gameId).emit('clientJoinedRoom', data);
         } else {
@@ -164,8 +165,4 @@ module.exports.Server = class {
         io.sockets.in(data.gameId).emit('clientDisplayStartButton', data);
     }
 
-    playerDisconnect() {
-        console.log('user disconnected');
-        io.sockets.emit('clientDisconnected', gameSocket.id);
-    }
 }
