@@ -10,9 +10,11 @@ Dark Purple : #A22FB0
 html, body {
     background-color: #89cff0;
     height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
+    position:fixed;
+    top:-1rem;
+    bottom:0;
+    left:0;
+    right:0;
 }
 
 #host_body {
@@ -326,17 +328,30 @@ html, body {
     margin-right: 1rem;
     margin-top: 1rem;
     color:white;
-    
-    
+}
+
+.score {
+    color: white;
 }
 
 
 #players {
-    background-color: #003366;
+    width: 150%;
 }
 
+
 .playerScore {
-    padding-top: 1rem;
+    padding-top: .65rem;
+    padding-bottom: .65rem;
+    padding-left: 4rem;
+    padding-right: 2rem;
+    margin-left:-3rem;
+    background-color: #003366;
+    border-radius: 30px 30px;
+    width: 200%;
+    font-size: 1.5rem;
+    position: relative;
+    left: -250px;
 }
 /* 
 #playerScores {

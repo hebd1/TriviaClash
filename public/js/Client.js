@@ -60,7 +60,7 @@ $(document).ready(function() {
                     console.log('first player joined');
                     socket.emit('firstPlayerJoined', data);
                 }
-                if (numPlayers == 7) {
+                if (numPlayers == 6) {
                     console.log('Room is full!');
                     socket.emit('hostRoomFull', gameID);
                     currentRound = 0;
@@ -72,6 +72,7 @@ $(document).ready(function() {
                 var index;
                 for (index = 0; index < numPlayers; index++) {
                     $('#p' + index).text(players[index]);
+                    $("#p" + index + "-div").animate({left: '10px'});
                 }
                 socket.emit('hostNextRound', gameID);
             }
@@ -147,16 +148,12 @@ $(document).ready(function() {
                 console.log('client disconnected reached');
 
                 if (IDs.includes(player_Id)) {
-                    console.log('removing player');
-                    console.log(IDs);
-                    console.log(players);
                     let i = IDs.indexOf(player_Id);
-                    console.log(i);
                     IDs.splice(i, 1);
                     players.splice(i, 1);
-                    $('#player' + i + 'Score').remove();
-                    console.log(IDs);
-                    console.log(players);
+                    $("#p" + i + "-div").animate({left: '-250px'});
+                    // $('#player' + i + 'Score').remove();
+            
     
                     // End the game if there aren't enough players
                     if (IDs.length == 0) {
