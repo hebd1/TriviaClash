@@ -69,8 +69,11 @@ $(document).ready(function() {
 
             this.startGame = function() {
                 $('#gameArea').html($('#host-question-template').html());
+                $('#p0').text(players[0]);
+                $("#p0-div").animate({left: '10px'});
                 var index;
-                for (index = 0; index < numPlayers; index++) {
+                for (index = 1; index < numPlayers; index++) {
+                    $('<div class="row playerScore" id="p' + index + '-div"><div id="player' + index + 'Score"><span class="playerName" id="p' + index + '">Player ' + index + '</span><span class="score" id="score_' + index + '">0</span></div></div>').insertAfter("#p" + (index - 1) + "-div");
                     $('#p' + index).text(players[index]);
                     $("#p" + index + "-div").animate({left: '10px'});
                 }
