@@ -77,7 +77,8 @@ $(document).ready(function() {
                     $('#p' + index).text(players[index]);
                     $("#p" + index + "-div").animate({left: '10px'});
                 }
-                socket.emit('hostNextRound', gameID);
+                //socket.emit('hostNextRound', gameID);
+                socket.emit('hostNextCategory', gameID);
             }
 
             this.displayNextRound = function(question) {
@@ -86,6 +87,14 @@ $(document).ready(function() {
                 $('#hostWord').text(question.question);
                 $('#category').text(question.category);
                 this.startTimer(10, $('#timer'), function() {socket.emit('hostTimeUp', gameID)});
+            }
+
+            this.displayNextCategory = function(data) {
+                console.log(data);
+                round = 0;
+                $('#hostWord').text('Round: ' + data.round + '\r\n' + data.category);
+                $('#timer').text('');
+                this.startTimer(3, $(''), function() {socket.emit('hostNextRound', gameID)});
             }
 
             this.incrementAnswers = function(data) {
@@ -115,7 +124,7 @@ $(document).ready(function() {
                 if (round < 10) {
                     this.startTimer(4, $(''), function() {socket.emit('hostNextRound', gameID)});
                 } else {
-                    this.startTimer(4, $(''), function() {socket.emit('hostEndGame', gameID)});
+                    this.startTimer(4, $(''), function() {socket.emit('hostNextCategory', gameID)});
                 }
 
             };
@@ -155,7 +164,6 @@ $(document).ready(function() {
                     IDs.splice(i, 1);
                     players.splice(i, 1);
                     $("#p" + i + "-div").animate({left: '-250px'});
-                    // $('#player' + i + 'Score').remove();
             
     
                     // End the game if there aren't enough players
@@ -201,6 +209,8 @@ $(document).ready(function() {
                     }
                 } else {
                     $('#answer-template').html($('#player-inner-tf-template').html());
+                    $('#0').text(question.answers[0]);
+                    $('#1').text(question.answers[1]);
                 }
             }
 
@@ -290,6 +300,12 @@ $(document).ready(function() {
         console.log('displayNextRound reached');
         console.log(data);
         role.displayNextRound(data);
+    });
+
+    socket.on('displayNextCategory', function(data) {
+        console.log('display next category reached');
+        console.log(data);
+        if (role instanceof Host) role.displayNextCategory(data);
     });
 
     socket.on('hostIncrementAnswers', function(data) {

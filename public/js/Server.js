@@ -11,28 +11,36 @@ class Game {
     constructor() {
         this.questionIndex = 0;
         this.correct_index = 0;
-        this.round = 0;
+        this.category_index = 0;
         this.answerArray = [];
+        this.categories = [9, 17, 23, 22, 11];
+    }
 
-        // Get trivia questions
+    getCategoryPayload() {
+        // Get category questions
         var xmlHttp = new XMLHttpRequest();
-        // xmlHttp.open("GET", 'https://opentdb.com/api.php?amount=10&encode=base64', false); // false for synchronous request
-        xmlHttp.open("GET", 'https://opentdb.com/api.php?amount=10&category=9&encode=base64', false); // false for synchronous request
+        xmlHttp.open("GET", 'https://opentdb.com/api.php?amount=10&category=' + this.categories[this.category_index] + '&encode=base64', false); // false for synchronous request
         xmlHttp.send(null);
         let response = xmlHttp.responseText;
         console.log(response);
-        let obj = JSON.parse(response);
-        this.questions = obj.results;
+        let res = JSON.parse(response);
+        this.questions = res.results;
+        this.category_index += 1;
+        this.questionIndex = 0;
+        let obj = this.questions[0];
+        return { "category": Base64.decode(obj.category), "round": this.category_index };
+
     }
 
-    getStartPayload() {
+    getQuestionPayload() {
+
         let obj = this.questions[this.questionIndex++];
         let answerArrayEnc = obj.incorrect_answers;
         this.answerArray = [];
         for (var i = 0; i <= answerArrayEnc.length; i++) {
             this.answerArray.push(Base64.decode(answerArrayEnc[i]));
         }
-        this.correct_index =  Math.floor(Math.random() * Math.floor(4));
+        this.correct_index =  Math.floor(Math.random() * Math.floor(this.answerArray.length));
         this.answerArray.splice(this.correct_index, 0, Base64.decode(obj.correct_answer));
         console.log('correct index: ' + this.correct_index);
         let payload = {
@@ -46,6 +54,7 @@ class Game {
     }
 
     getEndPayload() {
+        console.log('correct index: ' + triviaGame.correct_index);
         let payload = {
             "index" : triviaGame.correct_index,
             "answer" : triviaGame.answerArray[triviaGame.correct_index]
@@ -72,6 +81,7 @@ module.exports.Server = class {
         gameSocket.on('hostEndGame', this.hostEndGame);
         gameSocket.on('hostNextRound', this.hostNextRound);
         gameSocket.on('hostDisplayCorrectAnswer', this.hostDisplayCorrectAnswer);
+        gameSocket.on('hostNextCategory', this.hostNextCategory);
 
         // Player Events
         gameSocket.on('playerRequestJoin', this.playerRequestJoin);
@@ -128,7 +138,20 @@ module.exports.Server = class {
     hostNextRound(gameId) {
         console.log('host next round reached');
         try {
-            io.sockets.in(gameId).emit('displayNextRound', triviaGame.getStartPayload());
+            io.sockets.in(gameId).emit('displayNextRound', triviaGame.getQuestionPayload());
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    hostNextCategory(gameId) {
+        console.log('host next category reached');
+        try {
+            if (triviaGame.category_index == 4){
+                this.hostEndGame(gameId);
+            } else {
+                io.sockets.in(gameId).emit('displayNextCategory', triviaGame.getCategoryPayload());
+            }
         } catch (error) {
             console.log(error);
         }
