@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
 
     <!-- Ensure that everything scales appropriately on a mobile device -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <!-- Let's borrow a cool looking Font from Google -->
     <link href='https://fonts.googleapis.com/css?family=Quicksand:300,400,700' rel='stylesheet' type='text/css'>
@@ -21,7 +24,10 @@
     <div id="gameArea">
         <!-- This is where the templates defined below will be used -->
         <div class="titleWrapper">
-    
+            <div class="square d-flex align-items-center justify-content-center" id="logo">
+                <img src="res/brain_logo.png" alt="">
+            </div>
+
             <div class="title" id="game_title">
                 TriviaClash
             </div>
@@ -40,6 +46,10 @@
     <script id="intro-screen-template" type="text/template">
 
         <div class="titleWrapper">
+
+            <div id="logo">
+                <img src="res/brain_bulb.jpg" alt="">
+            </div>
 
             <div class="title">
                 TriviaClash
@@ -165,31 +175,37 @@
 
     <!-- Waiting screen after answer submission -->
     <script id="player-wait-template" type="text/template">
-        <div class="wait">
-            <p>
-                Submmitted!
-            </p>
+        <div class="square d-flex align-self-center align-items-center justify-content-center" id="wait_logo">
+            <img id="brain" src="res/brain_logo.png" alt="">
         </div>
     </script>
 
     <!-- Display correct or incorrect answered -->
     <script id="player-end-round-template" type="text/template">
-        <div class="result">
-            <p id="result_text">
+        <div class="result h-100 d-flex justify-content-center">
+            <div class="col-12 align-self-center">
+                <div class="row d-flex justify-content-center">
+                    <p id="result_text">
                 
-            </p>
-            <p id="round_score">
+                    </p>
+                </div>
+                <div class="row d-flex justify-content-center">
+                    <p id="round_score">
 
-            </p>
+                    </p>
+                </div>
+              
+            </div>
+               
         </div>
     </script>
 
-     <!-- Display Start game button to first player that joins -->
-     <script id="player-start-button-template" type="text/template">
-        <div class="container">
+    <!-- Display Start game button to first player that joins -->
+    <script id="player-start-button-template" type="text/template">
+        <div class="container d-flex h-100 align-items-center justify-content-center">
             <div class="row">
-              <div class="col text-center">
-                <button id="start_game_btn" type="button" class="btn btn-light">Start Game</button>
+              <div class="col">
+                <button id="start_game_btn" type="button" class="btn btn-light w-100">Start Game</button>
             </div>
             </div>
           </div>
@@ -197,17 +213,23 @@
 
     <!-- Display Game Winner -->
     <script id="player-end-game-template" type="text/template">
-        <div class="result">
-            <p id="winner">
-                
-            </p>
-            <p id="top_score">
-
-            </p>
+        <div class="result h-100 d-flex justify-content-center">
+            <div class="col-12 align-self-center">
+                <div class="row d-flex justify-content-center">
+                    <p id="winner">
+                    </p>
+                </div>
+                <div class="row d-flex justify-content-center">
+                    <p id="top_score">
+                    </p>
+                </div>
+              
+            </div>
+               
         </div>
     </script>
 
-     <!-- displays host question and player scores -->
+    <!-- displays host question and player scores -->
     <script id="host-question-template" type="text/template">
         <div class="container-fluid h-100">
             <div id="host_body" class="row justify-content-center align-self-center h-100">
@@ -241,19 +263,19 @@
         </div>
     </script>
 
-    <!-- JavaScript Libraries -->
-
-    <!-- jQuery! -->
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
-
     <!-- Bootstrap -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 
     <!-- If Socket.IO is used with Express, then the /socket.io/ path will
         serve the proper Socket.IO javascript files used by the browser -->
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="/js/Client.js"></script>
 </body>
+
 </html>

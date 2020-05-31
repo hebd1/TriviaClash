@@ -148,7 +148,8 @@ module.exports.Server = class {
         console.log('host next category reached');
         try {
             if (triviaGame.category_index == 4){
-                this.hostEndGame(gameId);
+                console.log('host end game reached');
+                io.sockets.in(gameId).emit('endGame');
             } else {
                 io.sockets.in(gameId).emit('displayNextCategory', triviaGame.getCategoryPayload());
             }
