@@ -95,8 +95,9 @@ module.exports.Server = class {
     hostCreateGame() {
         console.log('createGame reached');
         var thisGameId = (Math.random() * 100000) | 0;
-        gameSocket.emit('newGameCreated', { gameId: thisGameId, mySocketId: gameSocket.id });
         gameSocket.join(thisGameId);
+        gameSocket.emit('newGameCreated', { gameId: thisGameId, mySocketId: gameSocket.id });
+        
         triviaGame = new Game();
     }
 
@@ -164,13 +165,12 @@ module.exports.Server = class {
 
         // verify roome exists
         if (io.sockets.adapter.rooms[data.gameId] != undefined) {
-            console.log('joined');
-            // data.mySocketId = gameSocket.id;
             gameSocket.join(data.gameId);
+            console.log('joined');
             io.sockets.in(data.gameId).emit('clientJoinedRoom', data);
         } else {
             console.log('didnt join');
-            this.emit('error', { message: 'unable to join room' });
+            io.sockets.in(data.mySocketId).emit('errorJoinRoom', data);
         }
     }
 

@@ -135,6 +135,10 @@ html, body {
     font-weight: 300;
 }
 
+.name_field {
+    margin-top: 2rem;
+}
+
 .info label {
     display: block;
 }
@@ -229,11 +233,11 @@ html, body {
 }
 
 .createGameWrapper #gameURL {
-    font-size: 4em;
+    font-size: 5rem;
 }
 
 .createGameWrapper .gameId {
-    font-size: 8em;
+    font-size: 10rem;
 }
 
 
@@ -301,11 +305,10 @@ html, body {
 }
 
 #hostWord {
-    font-size: 2rem;
+    font-size: 4rem;
     height: 100%;
     width: 100%;
     white-space: pre-line;
-    font-size: 2rem;
 }
 
 .countdown {
