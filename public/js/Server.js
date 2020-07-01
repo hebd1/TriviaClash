@@ -170,7 +170,7 @@ module.exports.Server = class {
             io.sockets.in(data.gameId).emit('clientJoinedRoom', data);
         } else {
             console.log('didnt join');
-            this.emit('err', { message: 'unable to join room.' });
+            this.emit('err', { message: 'Unable to join room.' });
         }
     }
 
