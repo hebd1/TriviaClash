@@ -276,11 +276,16 @@ $(document).ready(function () {
         console.log('newGameCreated reached')
         $('#gameArea').html($('#create-game-template').html());
         $('#gameURL').text(window.location.href);
+       // $('#gameURL').text('http://192.168.1.198:8080/');
         $('#NewGameCode').text(data.gameId)
     });
 
     socket.on('endGame', function (data) {
         role.endGame();
+    });
+
+    socket.on('err', function (data) {
+        $('#playerWaitingMessage').append('<p/>').text('Error: ' + data.message);
     });
 
     // Display countdown to new game start
