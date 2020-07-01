@@ -68,22 +68,26 @@
 
     <!-- This screen appears when a user clicks "CREATE" on the Title Screen -->
     <script id="create-game-template" type="text/template">
-        <div class="createGameWrapper">
+        <div class="d-flex h-100 align-items-center justify-content-center">
+            <div class="createGameWrapper">
 
-            <div class="info">Open this site on your mobile device:</div>
-            <div id="gameURL" class="infoBig">Error!</div>
+                <div class="info">Open this site on your mobile device:</div>
+                <div id="gameURL" class="infoBig">Error!</div>
+    
+                <div class="info">Then click <strong>JOIN</strong> and <br/> enter the following Game ID:</div>
+                <div id="NewGameCode" class="gameId">Error!</div>
+    
+                <div id="playersWaiting"></div>
+            </div>
 
-            <div class="info">Then click <strong>JOIN</strong> and <br/> enter the following Game ID:</div>
-            <div id="NewGameCode" class="gameId">Error!</div>
-
-            <div id="playersWaiting"></div>
         </div>
+       
     </script>
 
     <!-- This scrreen appears when a player clicks "JOIN" on the Title Screen -->
     <script id="join-game-template" type="text/template">
         <div class="joinGameWrapper">
-            <div class="info">
+            <div class="info name_field">
                 <label for="inputPlayerName">Your Name:</label>
                 <input id="inputPlayerName" type="text" />
             </div>
@@ -261,6 +265,14 @@
                 </div>
             </div>
         </div>
+        <!-- <div class="row">
+            <div>
+                <span id="url">http://192.168.1.198:8080/</span>
+            </div>
+            <div>
+                <span id="room_code"></span>
+            </div>
+        </div> -->
     </script>
 
     <!-- Bootstrap -->

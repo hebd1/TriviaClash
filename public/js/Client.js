@@ -6,6 +6,7 @@ $(document).ready(function () {
     let gameID;
     var role; // player or host
     let currentRound;
+    let roomCode;
 
     class Client {
 
@@ -70,6 +71,8 @@ $(document).ready(function () {
                         $('<div class="row playerScore" id="p' + index + '-div"><div id="player' + index + 'Score"><span class="playerName" id="p' + index + '">Player ' + index + '</span><span class="score" id="score_' + index + '">0</span></div></div>').insertAfter("#p" + (index - 1) + "-div");
                         $('#p' + index).text(players[index]);
                         $("#p" + index + "-div").animate({ left: '10px' });
+                        $('#room_code').text(roomCode);
+                        $('#url').text('http://192.168.1.198:8080/');
                         
                     }
                 }
@@ -271,7 +274,7 @@ $(document).ready(function () {
         gameID = data.gameId;
         socketID = data.mySocketId;
         role = new Host();
-
+        roomCode = data.gameId;
         // display new game screen
         console.log('newGameCreated reached')
         $('#gameArea').html($('#create-game-template').html());
@@ -343,6 +346,11 @@ $(document).ready(function () {
 
     socket.on('clientDisconnected', function (player_Id) {
         if (role instanceof Host) role.removePlayer(player_Id);
+    });
+
+    socket.on('errorJoinRoom', function() {
+        $('#gameArea').html($('#player-end-round-template').html());
+        $('#result_text').text('Error: Unable to join room');
     });
 
 
