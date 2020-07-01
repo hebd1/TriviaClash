@@ -209,7 +209,7 @@ $(document).ready(function () {
                 socketID = data.mySocketId;
                 if (socket.io.engine.id == data.mySocketId) {
                     gameID = data.gameId;
-                    $('#playerWaitingMessage').append('<p/>').text('Joined game ' + gameID + '. Please wait for the game to begin..');
+                    $('#gameArea').html($('#player-start-button-template').html());
                 }
             };
 

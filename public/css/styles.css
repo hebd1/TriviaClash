@@ -136,7 +136,7 @@ html, body {
 }
 
 .name_field {
-    margin-top: 2rem;
+    margin-top: 3rem;
 }
 
 .info label {
@@ -192,6 +192,10 @@ html, body {
 
 .btn {
     white-space: normal;
+}
+
+#btnStart {
+    width: 90%;
 }
 
 .player_banner {
