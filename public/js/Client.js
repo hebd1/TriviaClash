@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     // Create web socket connection on page load
-    var socket = io.connect();
+    var socket = io.connect('http://localhost:8080');
     let socketID;
     let gameID;
     var role; // player or host
@@ -209,7 +209,7 @@ $(document).ready(function () {
                 socketID = data.mySocketId;
                 if (socket.io.engine.id == data.mySocketId) {
                     gameID = data.gameId;
-                    $('#gameArea').html($('#player-start-button-template').html());
+                    $('#gameArea').html($('#player-wait-template').html());
                 }
             };
 
@@ -392,4 +392,7 @@ $(document).ready(function () {
 
         role = new Player(data);
     });
+
+    $('button').attr('disabled',false); // enable buttons on page load
+
 });

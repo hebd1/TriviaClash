@@ -131,6 +131,7 @@ html, body {
 }
 
 .createGameWrapper{
+    margin-top: -10rem;
     color: #AE37B2;
     font-weight: 300;
 }
@@ -208,6 +209,7 @@ html, body {
 }
 
 #answer-template {
+    overflow: scroll;
     height: 80%;
 }
 
@@ -237,11 +239,11 @@ html, body {
 }
 
 .createGameWrapper #gameURL {
-    font-size: 5rem;
+    font-size: 4rem;
 }
 
 .createGameWrapper .gameId {
-    font-size: 10rem;
+    font-size: 4rem;
 }
 
 

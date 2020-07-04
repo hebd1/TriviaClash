@@ -96,9 +96,8 @@ module.exports.Server = class {
         console.log('createGame reached');
         var thisGameId = (Math.random() * 100000) | 0;
         gameSocket.join(thisGameId);
-        gameSocket.emit('newGameCreated', { gameId: thisGameId, mySocketId: gameSocket.id });
-        
         triviaGame = new Game();
+        gameSocket.emit('newGameCreated', { gameId: thisGameId, mySocketId: gameSocket.id });
     }
 
     // Two players have entered the game room
