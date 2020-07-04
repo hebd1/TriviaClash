@@ -1,11 +1,14 @@
 "use strict";
 var express = require("express");
+var ip = require('ip');
 var app = express();
 var http = require("http").createServer(app);
 var io = require("socket.io")(http);
 var port = process.env.PORT || 8080;
 var s = require("./public/js/Server.js");
 var servers = [];
+
+process.env.ip = ip.address();
 
 // includes css when sent
 app.use(express.static("public"));
@@ -15,7 +18,7 @@ app.get("/", function (req, res) {
 });
 
 http.listen(port, function () {
-  console.log("listening on: " + port);
+  console.log("listening on: " + process.env.ip + ":" + port);
 });
 
 io.on("connection", function (socket) {

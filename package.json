@@ -19,6 +19,7 @@
   "homepage": "https://github.com/hebd1/WordGame#readme",
   "devDependencies": {
     "express": "^4.17.1",
+    "ip": "^1.1.5",
     "js-base64": "^2.5.2",
     "prettier": "^2.0.5",
     "socket.io": "^2.3.0",

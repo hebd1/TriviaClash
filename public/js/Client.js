@@ -1,11 +1,13 @@
 $(document).ready(function () {
   // Create web socket connection on page load
-  var socket = io.connect("http://localhost:8080");
   let socketID;
   let gameID;
   var role; // player or host
   let currentRound;
   let roomCode;
+  let url = "http://" + process.env.ip + ":8080";
+ // let url = "http://localhost:8080";
+  var socket = io.connect(url);
 
   class Client {
     constructor() {
@@ -254,6 +256,7 @@ $(document).ready(function () {
       };
 
       this.displayNextRound = function (question) {
+        this.answeredIndex = 5; // reset answer index
         $("#gameArea").html($("#player-question-template").html());
         $("#player_name").text(name);
         if (question.type == "multiple") {
@@ -273,12 +276,12 @@ $(document).ready(function () {
         $("#answer-template").html($("#player-end-round-template").html());
         let roundScore;
         if (this.answeredIndex == data.index) {
-          $("#result_text").text("Nice one!");
+          $("#result_text").text("Correct!");
           $("#round_score").text("+10");
           roundScore = 10;
         } else {
-          $("#result_text").text("Oof! Too bad..");
-          $("#round_score").text("0");
+          $("#result_text").text("Wrong...");
+          $("#round_score").text("+0");
           roundScore = 0;
         }
         round++;
@@ -320,8 +323,7 @@ $(document).ready(function () {
     // display new game screen
     console.log("newGameCreated reached");
     $("#gameArea").html($("#create-game-template").html());
-    $("#gameURL").text(window.location.href);
-    // $('#gameURL').text('http://192.168.1.198:8080/');
+    $("#gameURL").text(url);
     $("#NewGameCode").text(data.gameId);
   });
 
