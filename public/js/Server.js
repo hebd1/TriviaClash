@@ -110,6 +110,7 @@ module.exports.Server = class {
     gameSocket.emit("newGameCreated", {
       gameId: thisGameId,
       mySocketId: gameSocket.id,
+      ip: process.env.ip
     });
   }
 
