@@ -197,6 +197,7 @@ body {
 
 #btnStart {
   width: 90%;
+  height: 5rem;
 }
 
 .player_banner {
@@ -239,7 +240,7 @@ body {
 }
 
 .createGameWrapper #gameURL {
-  font-size: 4rem;
+  font-size: 8vw;
 }
 
 .createGameWrapper .gameId {

@@ -5,9 +5,7 @@ $(document).ready(function () {
   var role; // player or host
   let currentRound;
   let roomCode;
-  let url = "http://" + process.env.ip + ":8080";
- // let url = "http://localhost:8080";
-  var socket = io.connect(url);
+  var socket = io.connect();
 
   class Client {
     constructor() {
@@ -316,6 +314,7 @@ $(document).ready(function () {
   // A new game was created by a host
   socket.on("newGameCreated", function (data) {
     // initialize game
+    url = "http://" + data.ip + ":8080";
     gameID = data.gameId;
     socketID = data.mySocketId;
     role = new Host();
