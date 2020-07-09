@@ -137,6 +137,14 @@ body {
   font-weight: 300;
 }
 
+#pad {
+  margin-top: 3rem;
+}
+
+#game_info {
+  margin-top: 1rem;
+}
+
 .name_field {
   margin-top: 3rem;
 }
@@ -240,7 +248,7 @@ body {
 }
 
 .createGameWrapper #gameURL {
-  font-size: 8vw;
+  font-size: 6vw;
 }
 
 .createGameWrapper .gameId {

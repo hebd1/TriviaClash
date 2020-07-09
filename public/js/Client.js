@@ -4,6 +4,7 @@ $(document).ready(function () {
   let gameID;
   var role; // player or host
   let currentRound;
+  let url;
   let roomCode;
   var socket = io.connect();
 
@@ -79,7 +80,7 @@ $(document).ready(function () {
             $("#p" + index).text(players[index]);
             $("#p" + index + "-div").animate({ left: "10px" });
             $("#room_code").text(roomCode);
-            $("#url").text("http://192.168.1.198:8080/");
+            $("#url").text(url);
           }
         }
       };
@@ -87,6 +88,8 @@ $(document).ready(function () {
       this.startGame = function () {
         isNewGame = false;
         $("#gameArea").html($("#host-question-template").html());
+        $("#gameUrl").text(url);
+        $("#roomCode").text('Room Code: ' + roomCode);
         $("#p0").text(players[0]);
         $("#p0-div").animate({ left: "10px" });
         var index;
@@ -323,7 +326,7 @@ $(document).ready(function () {
     console.log("newGameCreated reached");
     $("#gameArea").html($("#create-game-template").html());
     $("#gameURL").text(url);
-    $("#NewGameCode").text(data.gameId);
+    $("#NewGameCode").text(gameID);
   });
 
   socket.on("endGame", function (data) {
