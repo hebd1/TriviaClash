@@ -37,21 +37,21 @@ $(document).ready(function () {
       let numPlayers = 0;
       let numAnswered = 0;
       let round = 0;
-      let topPlayer = "";
-      let topScore = 0;
-      let tie = false;
+     
 
       this.joinRoom = function (data) {
         numPlayers += 1;
         let index;
         if (numPlayers < 7) {
-          // player left the game and is now rejoining
+          // new player
           if (!players.includes(data.name)) {
             players.push(data.name);
             IDs.push(data.mySocketId);
             playerScores.push(0);
             index = numPlayers - 1;
-          } else {
+          } 
+          // player left the game and is now rejoining
+          else {
             index = players.indexOf(data.name);
           }
           if (isNewGame) {
@@ -63,7 +63,7 @@ $(document).ready(function () {
             // remove empty p tags
             $('p').each(function(index, item) {
               if($.trim($(item).text()) === "") {
-                  $(item).slideUp(); // $(item).remove();
+                  $(item).slideUp(); 
               }
           });
             // first player decides when game starts
@@ -71,6 +71,7 @@ $(document).ready(function () {
               console.log("first player joined");
               socket.emit("firstPlayerJoined", data);
             }
+            // auto start game with 6 players (max)
             if (numPlayers == 6) {
               console.log("Room is full!");
               socket.emit("hostRoomFull", gameID);
@@ -185,18 +186,23 @@ $(document).ready(function () {
         let cur_score = parseInt($("#score_" + player_index).text());
         let new_score = cur_score + parseInt(data.score);
         playerScores[player_index] = new_score;
-        if (new_score > topScore) {
-          topScore = new_score;
-          topPlayer = data.pName;
-          tie = false;
-        } else if (data.pName != topPlayer && topScore == new_score) {
-          tie = true;
-        }
         $("#score_" + player_index).text(new_score);
       };
 
       this.endGame = function () {
         isNewGame = true;
+        let tie = false;
+        console.log(players);
+        console.log(playerScores);
+        let scoreClone = playerScores.slice();
+        scoreClone.sort();
+        console.log(scoreClone);
+        if (scoreClone[scoreClone.length - 1] == scoreClone[scoreClone.length - 2]) {
+          tie = true;
+        }
+        let topScore = scoreClone[scoreClone.length - 1];
+        let topIndex = playerScores.indexOf(topScore);
+        let topPlayer = players[topIndex];
         $("#gameArea").html($("#player-end-game-template").html());
         var mp = 150;
         var particleColors = {
@@ -219,12 +225,13 @@ $(document).ready(function () {
           colorThreshold: 10,
         };
         $.confetti.start();
+
         if (topScore == 0) {
           $("#winner").text("Wow.. Ya'll stupid.");
           $("#top_score").text("");
         } else if (tie == true) {
           $("#winner").text("Welp! it's a tie..");
-          $("#top_score").text("");
+          $("#top_score").text("Top Score: " + topScore);
         }
         $("#winner").text("Winner: " + topPlayer);
         $("#top_score").text("Top Score: " + topScore);
