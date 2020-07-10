@@ -55,12 +55,17 @@ $(document).ready(function () {
             index = players.indexOf(data.name);
           }
           if (isNewGame) {
-            // $('#gameArea').html($('#create-game-template').html());
             this.numPlayers = 0;
             // Update the lobby screen
             $("#playersWaiting").append(
-              "<p>Player " + data.name + " joined the game! <p/>"
+              "<p class='p_join'>Player " + data.name + " joined the game! <p/>"
             );
+            // remove empty p tags
+            $('p').each(function(index, item) {
+              if($.trim($(item).text()) === "") {
+                  $(item).slideUp(); // $(item).remove();
+              }
+          });
             // first player decides when game starts
             if (numPlayers == 1) {
               console.log("first player joined");

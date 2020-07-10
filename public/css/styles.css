@@ -132,9 +132,12 @@ body {
 }
 
 .createGameWrapper {
-  margin-top: -10rem;
   color: #ae37b2;
   font-weight: 300;
+}
+
+.p_join {
+  margin-bottom: 0rem;
 }
 
 #pad {
