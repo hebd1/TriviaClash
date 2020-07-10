@@ -31,6 +31,7 @@ $(document).ready(function () {
     constructor() {
       super();
       let players = [];
+      let playerScores = [];
       let IDs = [];
       let isNewGame = true;
       let numPlayers = 0;
@@ -42,9 +43,17 @@ $(document).ready(function () {
 
       this.joinRoom = function (data) {
         numPlayers += 1;
+        let index;
         if (numPlayers < 7) {
-          players.push(data.name);
-          IDs.push(data.mySocketId);
+          // player left the game and is now rejoining
+          if (!players.includes(data.name)) {
+            players.push(data.name);
+            IDs.push(data.mySocketId);
+            playerScores.push(0);
+            index = numPlayers - 1;
+          } else {
+            index = players.indexOf(data.name);
+          }
           if (isNewGame) {
             // $('#gameArea').html($('#create-game-template').html());
             this.numPlayers = 0;
@@ -63,7 +72,6 @@ $(document).ready(function () {
               currentRound = 0;
             }
           } else {
-            let index = numPlayers - 1;
             $(
               '<div class="row playerScore" id="p' +
                 index +
@@ -75,12 +83,10 @@ $(document).ready(function () {
                 index +
                 '</span><span class="score" id="score_' +
                 index +
-                '">0</span></div></div>'
+                '">' + playerScores[index] + '</span></div></div>'
             ).insertAfter("#p" + (index - 1) + "-div");
             $("#p" + index).text(players[index]);
             $("#p" + index + "-div").animate({ left: "10px" });
-            $("#room_code").text(roomCode);
-            $("#url").text(url);
           }
         }
       };
@@ -173,6 +179,7 @@ $(document).ready(function () {
         let player_index = players.indexOf(data.pName);
         let cur_score = parseInt($("#score_" + player_index).text());
         let new_score = cur_score + parseInt(data.score);
+        playerScores[player_index] = new_score;
         if (new_score > topScore) {
           topScore = new_score;
           topPlayer = data.pName;
@@ -223,10 +230,10 @@ $(document).ready(function () {
 
         if (IDs.includes(player_Id)) {
           let i = IDs.indexOf(player_Id);
-          IDs.splice(i, 1);
-          players.splice(i, 1);
           $("#p" + i + "-div").animate({ left: "-250px" });
-
+          this.startTimer(1, $(""), function () {
+             $("#p" + i + "-div").remove();
+          });
           // End the game if there aren't enough players
           if (IDs.length == 0) {
             $("#gameArea").html($("#player-end-game-template").html());

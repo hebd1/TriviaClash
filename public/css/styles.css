@@ -267,9 +267,17 @@ body {
   padding: 0;
 }
 
+#pad {
+  margin-top: 1rem;
+}
+
 #ulAnswers li {
   width: 100%;
   height: 16.6%;
+}
+
+#gameUrl {
+  margin-bottom: 0rem;
 }
 
 .btnAnswer {
