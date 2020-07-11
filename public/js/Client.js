@@ -1,9 +1,7 @@
 $(document).ready(function () {
-  // Create web socket connection on page load
   let socketID;
   let gameID;
   var role; // player or host
-  let currentRound;
   let url;
   let roomCode;
   var socket = io.connect();
@@ -12,7 +10,6 @@ $(document).ready(function () {
     constructor() {
       // Starts a timer with the given seconds, updates the display, and invokes the callback function at end
       this.startTimer = function (seconds, display, callback) {
-        var duration = seconds;
         var t = setInterval(function () {
           seconds--;
           if (seconds > 0) {
@@ -77,19 +74,24 @@ $(document).ready(function () {
               socket.emit("hostRoomFull", gameID);
               currentRound = 0;
             }
-          } else {
+          } 
+          // '<div class="row playerScore" id="p' +
+              //   index +
+              //   '-div"><div id="player' +
+              //   index +
+              //   'Score"><span class="playerName" id="p' +
+              //   index +
+              //   '">Player ' +
+              //   index +
+              //   '</span><span class="score" id="score_' +
+              //   index +
+              //   '">' + playerScores[index] + '</span></div></div>'
+          else {
             $(
-              '<div class="row playerScore" id="p' +
-                index +
-                '-div"><div id="player' +
-                index +
-                'Score"><span class="playerName" id="p' +
-                index +
-                '">Player ' +
-                index +
-                '</span><span class="score" id="score_' +
-                index +
-                '">' + playerScores[index] + '</span></div></div>'
+              '<div class="row playerScore" id="p' + index + '-div"><div class="row p_row" id="player' 
+              + index + 'Score"><div class="col-8 p_name"><span class="playerName" id="p' 
+              + index + '">PlayerX</span></div><div class="col-4 rounded-circle playerScoreCircle" alt="100x100"><span class="score" id="score_' 
+              + index + '">' + playerScores[index] + '</span></div></div>'
             ).insertAfter("#p" + (index - 1) + "-div");
             $("#p" + index).text(players[index]);
             $("#p" + index + "-div").animate({ left: "10px" });
@@ -107,17 +109,10 @@ $(document).ready(function () {
         var index;
         for (index = 1; index < numPlayers; index++) {
           $(
-            '<div class="row playerScore" id="p' +
-              index +
-              '-div"><div id="player' +
-              index +
-              'Score"><span class="playerName" id="p' +
-              index +
-              '">Player ' +
-              index +
-              '</span><span class="score" id="score_' +
-              index +
-              '">0</span></div></div>'
+            '<div class="row playerScore" id="p' + index + '-div"><div class="row p_row" id="player' 
+              + index + 'Score"><div class="col-8 p_name"><span class="playerName" id="p' 
+              + index + '">PlayerX</span></div><div class="col-4 rounded-circle playerScoreCircle" alt="100x100"><span class="score" id="score_' 
+              + index + '">' + playerScores[index] + '</span></div></div>'
           ).insertAfter("#p" + (index - 1) + "-div");
           $("#p" + index).text(players[index]);
           $("#p" + index + "-div").animate({ left: "10px" });
@@ -153,16 +148,12 @@ $(document).ready(function () {
           console.log("numAnswered: " + numAnswered);
           console.log("numPlayers" + numPlayers);
           if (numAnswered == numPlayers) {
-            // just let the timer run out for now
-            // issue with canceling already started timer
-            // socket.emit('hostTimeUp', gameID);
             numAnswered = 0;
           }
         }
       };
 
       this.endRound = function (data) {
-        // Occasional issues with answer received from trivia api not being base64 encoded
         try {
           $("#hostWord").text("Correct Answer: \n" + data.answer);
         } catch {
@@ -332,8 +323,6 @@ $(document).ready(function () {
   }
 
   // Server messages
-
-  // A new game was created by a host
   socket.on("newGameCreated", function (data) {
     // initialize game
     url = "http://" + data.ip + ":8080";

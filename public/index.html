@@ -242,11 +242,18 @@
       <div class="container-fluid h-100">
           <div id="host_body" class="row justify-content-center align-self-center h-100">
               <div id="players" class="col-2 align-self-center d-flex flex-column" >
-                  <div class="row playerScore" id="p0-div">
-                      <div id="player0Score">
-                          <span class="playerName" id="p0">Player1</span><span class="score" id="score_0">0</span>
+                <div class="row playerScore" id="p0-div">
+                    <div class="row p_row" id="player0Score">
+                      <div class="col-8 p_name">
+                          <span class="playerName" id="p0">Player1</span>
+
                       </div>
-                  </div>
+                        <div class="col-4 rounded-circle playerScoreCircle" alt="100x100">
+                          <span class="score" id="score_0">0</span>
+
+                        </div>
+                    </div>
+                </div>
               </div>
               <div class="col-10 h-100 d-flex">
                   <div id="wordArea" class="container d-flex align-self-center justify-content-center h-100">
@@ -279,14 +286,6 @@
               </div>
           </div>
       </div>
-      <!-- <div class="row">
-          <div>
-              <span id="url">http://192.168.1.198:8080/</span>
-          </div>
-          <div>
-              <span id="room_code"></span>
-          </div>
-      </div> -->
     </script>
 
     <!-- Bootstrap -->

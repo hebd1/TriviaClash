@@ -140,6 +140,11 @@ body {
   margin-bottom: 0rem;
 }
 
+.p_name {
+  padding-right: 50px;
+  /* min-width: 150px; */
+}
+
 #pad {
   margin-top: 3rem;
 }
@@ -360,13 +365,15 @@ body {
 }
 
 .playerName {
-  margin-right: 1rem;
+  margin-right: 2rem;
   margin-top: 1rem;
   color: white;
 }
 
 .score {
   color: white;
+  font-size: 3vh;
+  align-self: center;
 }
 
 #top_score,
@@ -394,9 +401,23 @@ body {
   padding-right: 2rem;
   margin-left: -3rem;
   background-color: #003366;
+  justify-content: flex-start;
   border-radius: 30px 30px;
   font-size: 1.5rem;
   left: -250px;
+  max-width: 20vw;
+}
+
+
+.p_row {
+  margin-top: 0rem;
+}
+
+.playerScoreCircle {
+  background-color: #ae37b2;;
+  display:flex;
+  justify-content: center;
+  max-width: 38px;
 }
 
 img {
