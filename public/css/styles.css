@@ -142,7 +142,7 @@ body {
 
 .p_name {
   padding-right: 50px;
-  /* min-width: 150px; */
+  width: 16vw;
 }
 
 #pad {
@@ -273,10 +273,6 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-}
-
-#pad {
-  margin-top: 1rem;
 }
 
 #ulAnswers li {

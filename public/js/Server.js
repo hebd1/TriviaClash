@@ -9,7 +9,7 @@ class Game {
   constructor() {
     this.questionIndex = 0;
     this.correct_index = 0;
-    this.category_index = 3;
+    this.category_index = 0;
     this.answerArray = [];
     this.categories = [9, 17, 23, 22, 11];
   }

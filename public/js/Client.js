@@ -75,23 +75,12 @@ $(document).ready(function () {
               currentRound = 0;
             }
           } 
-          // '<div class="row playerScore" id="p' +
-              //   index +
-              //   '-div"><div id="player' +
-              //   index +
-              //   'Score"><span class="playerName" id="p' +
-              //   index +
-              //   '">Player ' +
-              //   index +
-              //   '</span><span class="score" id="score_' +
-              //   index +
-              //   '">' + playerScores[index] + '</span></div></div>'
           else {
             $(
               '<div class="row playerScore" id="p' + index + '-div"><div class="row p_row" id="player' 
               + index + 'Score"><div class="col-8 p_name"><span class="playerName" id="p' 
               + index + '">PlayerX</span></div><div class="col-4 rounded-circle playerScoreCircle" alt="100x100"><span class="score" id="score_' 
-              + index + '">' + playerScores[index] + '</span></div></div>'
+              + index + '">' + playerScores[index] + '</span></div></div></div>'
             ).insertAfter("#p" + (index - 1) + "-div");
             $("#p" + index).text(players[index]);
             $("#p" + index + "-div").animate({ left: "10px" });
@@ -100,6 +89,7 @@ $(document).ready(function () {
       };
 
       this.startGame = function () {
+        console.log(players);
         isNewGame = false;
         $("#gameArea").html($("#host-question-template").html());
         $("#gameUrl").text(url);
@@ -107,12 +97,12 @@ $(document).ready(function () {
         $("#p0").text(players[0]);
         $("#p0-div").animate({ left: "10px" });
         var index;
-        for (index = 1; index < numPlayers; index++) {
+        for (index = 1; index < players.length; index++) {
           $(
             '<div class="row playerScore" id="p' + index + '-div"><div class="row p_row" id="player' 
               + index + 'Score"><div class="col-8 p_name"><span class="playerName" id="p' 
               + index + '">PlayerX</span></div><div class="col-4 rounded-circle playerScoreCircle" alt="100x100"><span class="score" id="score_' 
-              + index + '">' + playerScores[index] + '</span></div></div>'
+              + index + '">' + playerScores[index] + '</span></div></div></div>'
           ).insertAfter("#p" + (index - 1) + "-div");
           $("#p" + index).text(players[index]);
           $("#p" + index + "-div").animate({ left: "10px" });
