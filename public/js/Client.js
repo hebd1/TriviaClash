@@ -228,7 +228,7 @@ $(document).ready(function () {
              $("#p" + i + "-div").remove();
           });
           // End the game if there aren't enough players
-          if (IDs.length == 0) {
+          if ($(".p_row").length == 1) {
             $("#gameArea").html($("#player-end-game-template").html());
             $("#winner").text("Error: Not enough active players to continue..");
           }
