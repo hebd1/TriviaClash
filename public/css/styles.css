@@ -327,6 +327,7 @@ body {
 }
 
 #hostWord {
+  padding-top: 3rem;
   font-size: 4rem;
   height: 100%;
   width: 100%;
