@@ -14,6 +14,10 @@ body {
   overflow: hidden;
 }
 
+#question-div {
+  margin-top: 0rem;
+}
+
 #host_body {
   margin-top: 0rem;
 }
@@ -327,8 +331,8 @@ body {
 }
 
 #hostWord {
-  padding-top: 3rem;
-  font-size: 4rem;
+  padding-top: 4rem;
+  font-size: 7vh;
   height: 100%;
   width: 100%;
   white-space: pre-line;
