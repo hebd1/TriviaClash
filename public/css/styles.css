@@ -14,9 +14,9 @@ body {
   overflow: hidden;
 }
 
-#question-div {
+/* #question-div {
   margin-top: 0rem;
-}
+} */
 
 #host_body {
   margin-top: 0rem;
@@ -150,11 +150,13 @@ body {
 }
 
 #pad {
-  margin-top: 3rem;
+  margin-top: 4rem;
+  justify-content: center;
 }
 
 #game_info {
   margin-top: 1rem;
+  font-size: 2.5vh;
 }
 
 .name_field {
@@ -319,7 +321,9 @@ body {
 }
 
 #timer {
-  font-size: 2rem;
+  color: white;
+  font-size: 5vh;
+  align-self: center;
 }
 
 #game_title {
@@ -414,11 +418,24 @@ body {
   margin-top: 0rem;
 }
 
+#playerWaitingMessage{
+  color: #FF0033;
+}
+
 .playerScoreCircle {
   background-color: #ae37b2;;
   display:flex;
   justify-content: center;
   max-width: 38px;
+}
+
+
+#timerCircle {
+  background-color: #003366;
+  display:flex;
+  justify-content: center;
+  max-width: 5vw;
+  height: 5vw;
 }
 
 img {

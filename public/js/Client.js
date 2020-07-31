@@ -92,6 +92,7 @@ $(document).ready(function () {
         console.log(players);
         isNewGame = false;
         $("#gameArea").html($("#host-question-template").html());
+        $("#timerCircle").hide();
         $("#gameUrl").text(url);
         $("#roomCode").text('Room Code: ' + roomCode);
         $("#p0").text(players[0]);
@@ -114,6 +115,7 @@ $(document).ready(function () {
       this.displayNextRound = function (question) {
         console.log(question);
         $("#timer").text("10");
+        $("#timerCircle").show();
         $("#hostWord").text(question.question);
         $("#category").text(question.category);
         this.startTimer(10, $("#timer"), function () {
@@ -125,7 +127,7 @@ $(document).ready(function () {
         console.log(data);
         round = 0;
         $("#hostWord").text("Round: " + data.round + "\r\n" + data.category);
-        $("#timer").text("");
+        $("#timerCircle").hide();
         this.startTimer(3, $(""), function () {
           socket.emit("hostNextRound", gameID);
         });
@@ -149,7 +151,8 @@ $(document).ready(function () {
         } catch {
           $("#hostWord").text("Correct Answer: \n" + data.answer);
         }
-        $("#timer").text(" ");
+        // $("#timer").text(" ");
+        $("#timerCircle").hide();
         round++;
         if (round < 10) {
           this.startTimer(4, $(""), function () {
@@ -333,9 +336,9 @@ $(document).ready(function () {
 
   socket.on("err", function (data) {
     $("#playerWaitingMessage")
-      .append("<p/>")
-      .text("Error: " + data.message);
-  });
+    .append("<p/>")
+    .text("Error: " + data.message);
+});
 
   // Display countdown to new game start
   socket.on("playerStartCountdown", function () {
@@ -428,8 +431,8 @@ $(document).ready(function () {
 
   // Join Game Page events
   $(document).on("click", "#btnStart", function () {
-    console.log("start button clicked");
-    let data = {
+      console.log("start button clicked");
+      let data = {
       gameId: $("#inputGameId").val(),
       name: $("#inputPlayerName").val() || "Anonymous",
       mySocketId: socket.id,
